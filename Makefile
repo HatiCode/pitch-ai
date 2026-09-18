@@ -1,4 +1,4 @@
-.PHONY: test test-go test-web test-store build web run fmt emulator deploy
+.PHONY: test test-go test-web test-store build web run fmt types emulator deploy
 
 REGION ?= europe-west1
 SERVICE ?= pitch-ai
@@ -31,6 +31,13 @@ run: build
 
 fmt:
 	go fmt ./...
+
+# tygo generates the struct shapes; gen-types narrows the string enums into
+# unions and emits the position-to-group table.
+types:
+	go run github.com/gzuidhof/tygo@v0.2.21 generate
+	go run ./cmd/gen-types
+	cd web && npx biome format --write src/types >/dev/null
 
 # Cloud Build produces a linux/amd64 image; a local `docker build` on Apple
 # Silicon would produce arm64, which Cloud Run refuses to start.

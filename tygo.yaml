@@ -1,0 +1,10 @@
+# Struct shapes are generated from the Go types. Named string types come out of
+# tygo as `export type X = string`; cmd/gen-types then narrows them into real
+# string-literal unions. Both steps run via `make types`.
+packages:
+  - path: "pitch-ai/internal/core"
+    output_path: "web/src/types/core.ts"
+    type_mappings:
+      time.Time: "string"
+  - path: "pitch-ai/internal/auth"
+    output_path: "web/src/types/auth.ts"

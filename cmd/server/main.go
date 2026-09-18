@@ -10,8 +10,11 @@ import (
 	"syscall"
 	"time"
 
+	"github.com/google/uuid"
+
 	"pitch-ai/internal/auth"
 	"pitch-ai/internal/httpapi"
+	"pitch-ai/internal/squad"
 	firestorestore "pitch-ai/internal/store/firestore"
 	"pitch-ai/web"
 )
@@ -39,6 +42,8 @@ func main() {
 		os.Exit(1)
 	}
 
+	squadService := squad.NewService(store, store, uuid.NewString)
+
 	port := os.Getenv("PORT")
 	if port == "" {
 		port = "8080"
@@ -50,6 +55,7 @@ func main() {
 			Logger: logger,
 			Assets: web.Assets(),
 			Auth:   auth.Middleware(verifier, store),
+			Squad:  squadService,
 		}),
 		ReadHeaderTimeout: 10 * time.Second,
 	}

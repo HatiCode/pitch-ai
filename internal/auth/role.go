@@ -17,6 +17,11 @@ const (
 	ActionManageSquad Action = "manage_squad"
 )
 
+// AllRoles returns every role, least to most privileged.
+func AllRoles() []Role {
+	return []Role{RoleCoach, RoleAnalyst, RoleAdmin}
+}
+
 var rolePermissions = map[Role]map[Action]bool{
 	RoleCoach: {
 		ActionRead:      true,

@@ -90,7 +90,7 @@ match.
 
 ```
 clubs/{clubId}
-  players/{playerId}            # name, DOB, positions[], teamIds[], status
+  players/{playerId}            # name, DOB, positions[] (individual), teamIds[], status
   teams/{teamId}
     matches/{matchId}           # opponent, date, competition, venue, startingXV, status
       events/{eventId}          # the append-only log
@@ -237,9 +237,14 @@ their position-group mean in proportion to how little they have played, and
 flags that it has done so. There is no black box — a coach who cannot reason
 about a number will rightly distrust it.
 
-**Comparison happens within position groups:** front row (1–3), second row (4–5),
-back row (6–8), half backs (9–10), centres (12–13), back three (11, 14, 15).
-Ranking a prop's carry count against a winger's is noise dressed as insight.
+**Comparison happens within position groups.** A player records their actual
+positions — loosehead, hooker, tighthead, lock, blindside, openside, number 8,
+scrum-half, fly-half, wing, inside centre, outside centre, fullback — and the
+comparison group is derived from them: front row (1–3), second row (4–5), back
+row (6–8), half backs (9–10), centres (12–13), back three (11, 14, 15). Storing
+the position rather than only the group keeps the distinction between a 6 and a
+7, which matters for selection. Ranking a prop's carry count against a winger's
+is noise dressed as insight.
 
 ### Post-match team report
 

@@ -49,7 +49,7 @@
 
 | File | Responsibility |
 |---|---|
-| `internal/core/position.go` | Jersey number → position group. Pure. |
+| `internal/core/position.go` | The 13 positions, their comparison groups, and jersey mapping. Pure. |
 | `internal/core/player.go` | `Player` type and validation. Pure. |
 | `internal/core/match.go` | `Match`, `Lineup` types and validation. Pure. |
 | `internal/squad/service.go` | Player use-cases; declares `PlayerStore` |
@@ -1607,9 +1607,11 @@ Commit message: `ci: test Go and web on pull requests`
 - Consumes: nothing. `internal/core` imports only the standard library.
 - Produces:
   - `core.ErrNotFound`, `core.ValidationError` with `Error() string`
+  - `core.Position` constants: `Loosehead`, `Hooker`, `Tighthead`, `Lock`, `Blindside`, `Openside`, `NumberEight`, `ScrumHalf`, `FlyHalf`, `Wing`, `InsideCentre`, `OutsideCentre`, `Fullback`
   - `core.PositionGroup` constants: `FrontRow`, `SecondRow`, `BackRow`, `HalfBacks`, `Centres`, `BackThree`
-  - `core.PositionGroupForJersey(jersey int) (PositionGroup, error)`
-  - `core.Player{ID, ClubID, FirstName, LastName, DOB string; Positions []PositionGroup; TeamIDs []string; Status PlayerStatus}`
+  - `core.AllPositions() []Position`, `(Position).Group() PositionGroup`, `(Position).Valid() bool`
+  - `core.PositionForJersey(jersey int) (Position, error)`, `core.PositionGroupForJersey(jersey int) (PositionGroup, error)`
+  - `core.Player{ID, ClubID, FirstName, LastName, DOB string; Positions []Position; TeamIDs []string; Status PlayerStatus}`, `(Player).Groups() []PositionGroup`
   - `core.PlayerStatus` constants: `PlayerActive`, `PlayerInactive`
   - `(Player).Validate() error`, `(Player).DisplayName() string`
 
@@ -3365,7 +3367,7 @@ Commit message: `feat(web): Firebase sign-in, API client and app shell`
 - Consumes: `useAuth` (Task 11), `core.Player`, `core.PositionGroup` from `web/src/types/core` (Task 10), player endpoints (Task 10)
 - Produces:
   - `usePlayers()`, `useSavePlayer()`, `useDeletePlayer()` hooks
-  - `POSITION_GROUP_LABELS: Record<PositionGroup, string>`
+  - `POSITION_LABELS: Record<Position, string>` and `POSITION_GROUP_LABELS: Record<PositionGroup, string>`
   - `<PlayerForm player? onSubmit onCancel>`
 
 - [ ] **Step 1: Write the position labels**
@@ -3375,6 +3377,24 @@ Create `web/src/features/players/positions.ts`:
 ```ts
 import type { PositionGroup } from "../../types/core";
 
+export const POSITION_LABELS: Record<Position, string> = {
+  loosehead: "Loosehead prop (1)",
+  hooker: "Hooker (2)",
+  tighthead: "Tighthead prop (3)",
+  lock: "Lock (4/5)",
+  blindside: "Blindside flanker (6)",
+  openside: "Openside flanker (7)",
+  number_eight: "Number 8",
+  scrum_half: "Scrum-half (9)",
+  fly_half: "Fly-half (10)",
+  wing: "Wing (11/14)",
+  inside_centre: "Inside centre (12)",
+  outside_centre: "Outside centre (13)",
+  fullback: "Fullback (15)",
+};
+
+export const POSITIONS = Object.keys(POSITION_LABELS) as Position[];
+
 export const POSITION_GROUP_LABELS: Record<PositionGroup, string> = {
   front_row: "Front row",
   second_row: "Second row",
@@ -3383,8 +3403,6 @@ export const POSITION_GROUP_LABELS: Record<PositionGroup, string> = {
   centres: "Centres",
   back_three: "Back three",
 };
-
-export const POSITION_GROUPS = Object.keys(POSITION_GROUP_LABELS) as PositionGroup[];
 ```
 
 If `tsc` reports that `Record<PositionGroup, string>` is missing a key, the Go constants and this map have diverged — add the missing entry rather than loosening the type. That exhaustiveness check is the point.
