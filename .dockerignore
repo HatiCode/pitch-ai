@@ -1,0 +1,9 @@
+.git
+.github
+bin
+docs
+infra
+scripts
+web/node_modules
+web/dist
+.superpowers
