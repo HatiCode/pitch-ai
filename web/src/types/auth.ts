@@ -10,6 +10,11 @@ export interface Claims {
 	uid: string;
 	email: string;
 }
+/**
+ * Membership is stored at users/{uid}. The document ID carries the UID, so it
+ * is not duplicated in the body; the remaining tags pin the Firestore field
+ * names rather than leaving them to default to the Go field names.
+ */
 export interface Membership {
 	uid: string;
 	clubId: string;
@@ -33,7 +38,7 @@ export type Role = "coach" | "analyst" | "admin";
 export const RoleCoach: Role = "coach";
 export const RoleAnalyst: Role = "analyst";
 export const RoleAdmin: Role = "admin";
-export type Action = string;
+export type Action = "read" | "tag_match" | "edit_match" | "manage_squad";
 export const ActionRead: Action = "read";
 export const ActionTagMatch: Action = "tag_match";
 export const ActionEditMatch: Action = "edit_match";

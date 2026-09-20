@@ -13,6 +13,7 @@ import (
 	"github.com/google/uuid"
 
 	"pitch-ai/internal/auth"
+	"pitch-ai/internal/fixture"
 	"pitch-ai/internal/httpapi"
 	"pitch-ai/internal/squad"
 	firestorestore "pitch-ai/internal/store/firestore"
@@ -43,6 +44,8 @@ func main() {
 	}
 
 	squadService := squad.NewService(store, store, uuid.NewString)
+	teamService := squad.NewTeamService(store, store, store, uuid.NewString)
+	fixtureService := fixture.NewService(store, store, store, uuid.NewString)
 
 	port := os.Getenv("PORT")
 	if port == "" {
@@ -52,10 +55,12 @@ func main() {
 	srv := &http.Server{
 		Addr: ":" + port,
 		Handler: httpapi.NewRouter(httpapi.Deps{
-			Logger: logger,
-			Assets: web.Assets(),
-			Auth:   auth.Middleware(verifier, store),
-			Squad:  squadService,
+			Logger:  logger,
+			Assets:  web.Assets(),
+			Auth:    auth.Middleware(verifier, store),
+			Squad:   squadService,
+			Teams:   teamService,
+			Fixture: fixtureService,
 		}),
 		ReadHeaderTimeout: 10 * time.Second,
 	}

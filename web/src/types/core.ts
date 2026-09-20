@@ -16,6 +16,44 @@ export interface ValidationError {
 }
 
 //////////
+// source: match.go
+
+export type Venue = "home" | "away" | "neutral";
+export const VenueHome: Venue = "home";
+export const VenueAway: Venue = "away";
+export const VenueNeutral: Venue = "neutral";
+export type MatchStatus = "scheduled" | "in_progress" | "completed";
+export const MatchScheduled: MatchStatus = "scheduled";
+export const MatchInProgress: MatchStatus = "in_progress";
+export const MatchCompleted: MatchStatus = "completed";
+/**
+ * LineupSlot ties a jersey number to the player wearing it.
+ */
+export interface LineupSlot {
+	jersey: number /* int */;
+	playerId: string;
+}
+/**
+ * Lineup is the selected squad for one match.
+ */
+export interface Lineup {
+	starters: LineupSlot[];
+	bench: LineupSlot[];
+}
+export interface Match {
+	id?: string;
+	clubId?: string;
+	teamId?: string;
+	seasonId: string;
+	opponent: string;
+	kickoffAt: string;
+	competition: string;
+	venue: Venue;
+	status: MatchStatus;
+	lineup: Lineup;
+}
+
+//////////
 // source: player.go
 
 export type PlayerStatus = "active" | "inactive";
@@ -85,3 +123,19 @@ export const BackRow: PositionGroup = "back_row";
 export const HalfBacks: PositionGroup = "half_backs";
 export const Centres: PositionGroup = "centres";
 export const BackThree: PositionGroup = "back_three";
+
+//////////
+// source: team.go
+
+/**
+ * Team is a squad that plays fixtures — the 1st XV, the Colts, the women's
+ * side. Players belong to the club, not to a team, so one player can be in
+ * several teams at once.
+ */
+export interface Team {
+	id?: string;
+	clubId?: string;
+	name: string;
+	shortName: string;
+	active: boolean;
+}

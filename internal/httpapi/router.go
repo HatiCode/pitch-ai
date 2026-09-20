@@ -6,15 +6,18 @@ import (
 	"net/http"
 
 	"pitch-ai/internal/auth"
+	"pitch-ai/internal/fixture"
 	"pitch-ai/internal/squad"
 )
 
 // Deps holds everything the HTTP layer needs. It is populated once, in main.
 type Deps struct {
-	Logger *slog.Logger
-	Assets fs.FS
-	Auth   func(http.Handler) http.Handler
-	Squad  *squad.Service
+	Logger  *slog.Logger
+	Assets  fs.FS
+	Auth    func(http.Handler) http.Handler
+	Squad   *squad.Service
+	Teams   *squad.TeamService
+	Fixture *fixture.Service
 }
 
 // protected requires an authenticated caller whose role permits the action.
@@ -43,6 +46,21 @@ func NewRouter(d Deps) http.Handler {
 		mux.Handle("POST /api/players", d.protected(auth.ActionManageSquad, d.handleCreatePlayer))
 		mux.Handle("PUT /api/players/{playerID}", d.protected(auth.ActionManageSquad, d.handleUpdatePlayer))
 		mux.Handle("DELETE /api/players/{playerID}", d.protected(auth.ActionManageSquad, d.handleDeletePlayer))
+	}
+
+	if d.Auth != nil && d.Teams != nil {
+		mux.Handle("GET /api/teams", d.protected(auth.ActionRead, d.handleListTeams))
+		mux.Handle("GET /api/teams/{teamID}", d.protected(auth.ActionRead, d.handleGetTeam))
+		mux.Handle("POST /api/teams", d.protected(auth.ActionManageSquad, d.handleCreateTeam))
+		mux.Handle("PUT /api/teams/{teamID}", d.protected(auth.ActionManageSquad, d.handleUpdateTeam))
+		mux.Handle("DELETE /api/teams/{teamID}", d.protected(auth.ActionManageSquad, d.handleDeleteTeam))
+	}
+
+	if d.Auth != nil && d.Fixture != nil {
+		mux.Handle("GET /api/teams/{teamID}/matches", d.protected(auth.ActionRead, d.handleListMatches))
+		mux.Handle("GET /api/teams/{teamID}/matches/{matchID}", d.protected(auth.ActionRead, d.handleGetMatch))
+		mux.Handle("POST /api/teams/{teamID}/matches", d.protected(auth.ActionEditMatch, d.handleCreateMatch))
+		mux.Handle("PUT /api/teams/{teamID}/matches/{matchID}/lineup", d.protected(auth.ActionEditMatch, d.handleSetLineup))
 	}
 
 	// Nil in handler tests, which have no asset bundle to serve.

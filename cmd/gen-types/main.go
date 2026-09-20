@@ -34,12 +34,15 @@ func main() {
 		"Position":      positions,
 		"PositionGroup": groups,
 		"PlayerStatus":  statuses,
+		"Venue":         strs(core.AllVenues()),
+		"MatchStatus":   strs(core.AllMatchStatuses()),
 	}); err != nil {
 		fail(err)
 	}
 
 	if err := narrow(authPath, map[string][]string{
-		"Role": roles,
+		"Role":   roles,
+		"Action": strs(auth.AllActions()),
 	}); err != nil {
 		fail(err)
 	}
@@ -68,7 +71,46 @@ func narrow(path string, unions map[string][]string) error {
 			fmt.Sprintf("export type %s = %s;", name, union(values)), 1)
 	}
 
-	return os.WriteFile(path, []byte(dropAnyAliases(out)), 0o644)
+	out = dropAnyAliases(out)
+	if err := assertNoWideAliases(path, out); err != nil {
+		return err
+	}
+	return os.WriteFile(path, []byte(out), 0o644)
+}
+
+// opaqueTypes are named Go string types that are deliberately left as `string`
+// on the client because they have no fixed set of values — identifiers and the
+// like. Anything not listed here must be narrowed into a union.
+var opaqueTypes = map[string]bool{}
+
+// assertNoWideAliases fails when a named string type reaches the client as
+// `export type X = string`. Such an alias silently defeats exhaustiveness
+// checks: Record<X, string> would accept any object at all. Adding an enum in
+// Go and forgetting to register it above should break the build, not quietly
+// produce a type that checks nothing.
+func assertNoWideAliases(path, src string) error {
+	var wide []string
+	for line := range strings.Lines(src) {
+		trimmed := strings.TrimSpace(line)
+		name, ok := strings.CutPrefix(trimmed, "export type ")
+		if !ok {
+			continue
+		}
+		name, ok = strings.CutSuffix(name, " = string;")
+		if !ok || opaqueTypes[name] {
+			continue
+		}
+		wide = append(wide, name)
+	}
+
+	if len(wide) > 0 {
+		return fmt.Errorf(
+			"%s: %s reached the client as `= string`.\n"+
+				"  Register each in cmd/gen-types (with an All…() accessor in Go) so it becomes a\n"+
+				"  string-literal union, or add it to opaqueTypes if it genuinely has no fixed values.",
+			path, strings.Join(wide, ", "))
+	}
+	return nil
 }
 
 // dropAnyAliases removes the `export type X = any;` lines tygo emits for Go

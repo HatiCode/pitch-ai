@@ -22,6 +22,11 @@ func AllRoles() []Role {
 	return []Role{RoleCoach, RoleAnalyst, RoleAdmin}
 }
 
+// AllActions returns every permission-checked action.
+func AllActions() []Action {
+	return []Action{ActionRead, ActionTagMatch, ActionEditMatch, ActionManageSquad}
+}
+
 var rolePermissions = map[Role]map[Action]bool{
 	RoleCoach: {
 		ActionRead:      true,

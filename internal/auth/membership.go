@@ -13,11 +13,14 @@ type Claims struct {
 	Email string `json:"email"`
 }
 
+// Membership is stored at users/{uid}. The document ID carries the UID, so it
+// is not duplicated in the body; the remaining tags pin the Firestore field
+// names rather than leaving them to default to the Go field names.
 type Membership struct {
-	UID     string   `json:"uid"`
-	ClubID  string   `json:"clubId"`
-	TeamIDs []string `json:"teamIds"`
-	Role    Role     `json:"role"`
+	UID     string   `json:"uid" firestore:"-"`
+	ClubID  string   `json:"clubId" firestore:"clubId"`
+	TeamIDs []string `json:"teamIds" firestore:"teamIds"`
+	Role    Role     `json:"role" firestore:"role"`
 }
 
 // TokenVerifier turns a bearer token into verified claims.
