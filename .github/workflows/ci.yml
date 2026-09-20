@@ -85,12 +85,16 @@ jobs:
           service_account: ${{ vars.DEPLOY_SERVICE_ACCOUNT }}
       - uses: google-github-actions/setup-gcloud@v2
       - name: Build image
+        # Explicit, because the default is the Compute Engine service account
+        # and that one is a project editor.
         run: |
           gcloud builds submit --config cloudbuild.yaml \
+            --service-account="$BUILD_SERVICE_ACCOUNT" \
             --substitutions=_IMAGE="$IMAGE:$GITHUB_SHA",_FIREBASE_API_KEY="$FIREBASE_API_KEY",_FIREBASE_AUTH_DOMAIN="$FIREBASE_AUTH_DOMAIN",_FIREBASE_PROJECT_ID="$FIREBASE_PROJECT_ID" \
             .
         env:
           IMAGE: ${{ vars.IMAGE }}
+          BUILD_SERVICE_ACCOUNT: ${{ vars.BUILD_SERVICE_ACCOUNT }}
           # Public once served, but injected so they stay out of the repository.
           FIREBASE_API_KEY: ${{ secrets.FIREBASE_API_KEY }}
           FIREBASE_AUTH_DOMAIN: ${{ secrets.FIREBASE_AUTH_DOMAIN }}

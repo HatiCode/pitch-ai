@@ -76,10 +76,43 @@ resource "google_service_account_iam_member" "deployer_acts_as_server" {
   member             = "serviceAccount:${google_service_account.deployer.email}"
 }
 
+# Builds run as this account. A build with no service account of its own falls
+# back to the Compute Engine default account, which carries roles/editor: the
+# build would get project-wide write access, and so would anyone able to push to
+# main, since submitting a build means acting as the account it runs under.
+resource "google_service_account" "build" {
+  account_id   = "${var.service_name}-build"
+  display_name = "pitch-ai Cloud Build worker"
+}
+
+resource "google_project_iam_member" "build" {
+  for_each = toset([
+    "roles/artifactregistry.writer", # push the built image
+    "roles/logging.logWriter",       # required by CLOUD_LOGGING_ONLY
+    "roles/storage.objectViewer",    # read the source gcloud staged
+  ])
+  project = var.project_id
+  role    = each.value
+  member  = "serviceAccount:${google_service_account.build.email}"
+}
+
+# Submitting a build is a separate grant from acting as the account it runs as.
+resource "google_service_account_iam_member" "deployer_acts_as_build" {
+  service_account_id = google_service_account.build.name
+  role               = "roles/iam.serviceAccountUser"
+  member             = "serviceAccount:${google_service_account.deployer.email}"
+}
+
 output "wif_provider" {
   value = google_iam_workload_identity_pool_provider.github.name
 }
 
 output "deployer_service_account" {
   value = google_service_account.deployer.email
+}
+
+# Fully qualified rather than a bare email: --service-account takes the
+# projects/*/serviceAccounts/* form.
+output "build_service_account" {
+  value = google_service_account.build.name
 }
