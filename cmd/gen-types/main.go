@@ -36,6 +36,10 @@ func main() {
 		"PlayerStatus":  statuses,
 		"Venue":         strs(core.AllVenues()),
 		"MatchStatus":   strs(core.AllMatchStatuses()),
+		"EventKind":     strs(core.AllEventKinds()),
+		"EventGroup":    strs(core.AllEventGroups()),
+		"Zone":          strs(core.AllZones()),
+		"Possession":    strs(core.AllPossessions()),
 	}); err != nil {
 		fail(err)
 	}
