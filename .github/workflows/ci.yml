@@ -74,6 +74,12 @@ jobs:
     needs: [go, web, types]
     if: github.ref == 'refs/heads/main' && github.event_name == 'push'
     runs-on: ubuntu-latest
+    # Records each run as a GitHub deployment, which is what puts the live URL
+    # and the deploy history on the repository home page. Nothing here gates the
+    # job: the environment has no protection rules.
+    environment:
+      name: production
+      url: ${{ steps.smoke.outputs.url }}
     permissions:
       contents: read
       id-token: write
@@ -109,8 +115,10 @@ jobs:
           SERVICE_NAME: ${{ vars.SERVICE_NAME }}
           REGION: ${{ vars.REGION }}
       - name: Smoke test the new revision
+        id: smoke
         run: |
           url=$(gcloud run services describe "$SERVICE_NAME" --region "$REGION" --format='value(status.url)')
+          echo "url=$url" >> "$GITHUB_OUTPUT"
           status=$(curl -s -o /dev/null -w '%{http_code}' "$url/api/healthz")
           test "$status" = "200" || (echo "healthz returned $status" >&2 && exit 1)
           echo "deployed and healthy: $url"
