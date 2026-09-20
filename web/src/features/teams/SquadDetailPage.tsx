@@ -93,7 +93,13 @@ export function SquadDetailPage() {
 					)}
 				</div>
 				<p className="text-sm text-slate-500">
-					{inSquad.length} {inSquad.length === 1 ? "player" : "players"}
+					{inSquad.length} {inSquad.length === 1 ? "player" : "players"} ·{" "}
+					<Link
+						to={`/squads/${teamId}/matches`}
+						className="underline hover:text-slate-700"
+					>
+						Fixtures
+					</Link>
 				</p>
 			</div>
 

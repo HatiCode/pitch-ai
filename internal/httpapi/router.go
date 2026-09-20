@@ -63,9 +63,20 @@ func NewRouter(d Deps) http.Handler {
 		mux.Handle("PUT /api/teams/{teamID}/matches/{matchID}/lineup", d.protected(auth.ActionEditMatch, d.handleSetLineup))
 	}
 
+	// Unmatched /api/ paths must not reach the SPA handler below: a client
+	// hitting a mistyped endpoint should get a JSON 404, not an HTML page that
+	// fails to parse. More specific patterns above still win.
+	mux.HandleFunc("/api/", func(w http.ResponseWriter, r *http.Request) {
+		writeError(w, http.StatusNotFound, "no such endpoint")
+	})
+
+	// Registered without a method so that "/api/" above is unambiguously more
+	// specific: ServeMux panics on a pattern pair where one is narrower by
+	// method and the other by path.
+	//
 	// Nil in handler tests, which have no asset bundle to serve.
 	if d.Assets != nil {
-		mux.Handle("GET /", SPAHandler(d.Assets))
+		mux.Handle("/", SPAHandler(d.Assets))
 	}
 	return mux
 }

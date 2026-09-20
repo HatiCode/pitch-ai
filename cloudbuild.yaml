@@ -1,0 +1,22 @@
+# Build args carry the Firebase web config into the Vite build.
+#
+# These values are public once the app is served — Vite inlines them into the
+# JS bundle — but they are kept out of the repository so secret scanning stays
+# meaningful and so the next value added here is not committed by habit.
+#
+# Locally they come from web/.env.local; in CI from GitHub Actions secrets.
+steps:
+  - name: gcr.io/cloud-builders/docker
+    args:
+      - build
+      - --build-arg=VITE_FIREBASE_API_KEY=${_FIREBASE_API_KEY}
+      - --build-arg=VITE_FIREBASE_AUTH_DOMAIN=${_FIREBASE_AUTH_DOMAIN}
+      - --build-arg=VITE_FIREBASE_PROJECT_ID=${_FIREBASE_PROJECT_ID}
+      - --tag=${_IMAGE}
+      - .
+
+images:
+  - ${_IMAGE}
+
+options:
+  logging: CLOUD_LOGGING_ONLY

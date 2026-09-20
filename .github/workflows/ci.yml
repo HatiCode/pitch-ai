@@ -66,3 +66,50 @@ jobs:
         run: |
           make types
           git diff --exit-code web/src/types
+
+  # Keyless: GitHub mints an OIDC token and GCP exchanges it for short-lived
+  # credentials. The pool provider only accepts tokens from this repository, so
+  # there is no long-lived service-account key anywhere.
+  deploy:
+    needs: [go, web, types]
+    if: github.ref == 'refs/heads/main' && github.event_name == 'push'
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      id-token: write
+    steps:
+      - uses: actions/checkout@v4
+      - uses: google-github-actions/auth@v2
+        with:
+          workload_identity_provider: ${{ vars.WIF_PROVIDER }}
+          service_account: ${{ vars.DEPLOY_SERVICE_ACCOUNT }}
+      - uses: google-github-actions/setup-gcloud@v2
+      - name: Build image
+        run: |
+          gcloud builds submit --config cloudbuild.yaml \
+            --substitutions=_IMAGE="$IMAGE:$GITHUB_SHA",_FIREBASE_API_KEY="$FIREBASE_API_KEY",_FIREBASE_AUTH_DOMAIN="$FIREBASE_AUTH_DOMAIN",_FIREBASE_PROJECT_ID="$FIREBASE_PROJECT_ID" \
+            .
+        env:
+          IMAGE: ${{ vars.IMAGE }}
+          # Public once served, but injected so they stay out of the repository.
+          FIREBASE_API_KEY: ${{ secrets.FIREBASE_API_KEY }}
+          FIREBASE_AUTH_DOMAIN: ${{ secrets.FIREBASE_AUTH_DOMAIN }}
+          FIREBASE_PROJECT_ID: ${{ secrets.FIREBASE_PROJECT_ID }}
+      - name: Deploy revision
+        run: |
+          gcloud run deploy "$SERVICE_NAME" \
+            --image "$IMAGE:$GITHUB_SHA" \
+            --region "$REGION"
+        env:
+          IMAGE: ${{ vars.IMAGE }}
+          SERVICE_NAME: ${{ vars.SERVICE_NAME }}
+          REGION: ${{ vars.REGION }}
+      - name: Smoke test the new revision
+        run: |
+          url=$(gcloud run services describe "$SERVICE_NAME" --region "$REGION" --format='value(status.url)')
+          status=$(curl -s -o /dev/null -w '%{http_code}' "$url/api/healthz")
+          test "$status" = "200" || (echo "healthz returned $status" >&2 && exit 1)
+          echo "deployed and healthy: $url"
+        env:
+          SERVICE_NAME: ${{ vars.SERVICE_NAME }}
+          REGION: ${{ vars.REGION }}

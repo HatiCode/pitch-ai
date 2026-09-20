@@ -41,6 +41,14 @@ types:
 
 # Cloud Build produces a linux/amd64 image; a local `docker build` on Apple
 # Silicon would produce arm64, which Cloud Run refuses to start.
+#
+# The Firebase web config is read from web/.env.local (gitignored) and passed as
+# build substitutions, so it never lives in the repository. CI supplies the same
+# values from GitHub Actions secrets.
 deploy:
-	gcloud builds submit --tag $(IMAGE):latest .
+	@test -f web/.env.local || (echo "web/.env.local missing; copy web/.env.example and fill it in" >&2 && exit 1)
+	set -a && . ./web/.env.local && set +a && \
+	gcloud builds submit --config cloudbuild.yaml \
+		--substitutions=_IMAGE=$(IMAGE):latest,_FIREBASE_API_KEY=$$VITE_FIREBASE_API_KEY,_FIREBASE_AUTH_DOMAIN=$$VITE_FIREBASE_AUTH_DOMAIN,_FIREBASE_PROJECT_ID=$$VITE_FIREBASE_PROJECT_ID \
+		.
 	gcloud run deploy $(SERVICE) --image $(IMAGE):latest --region $(REGION)
