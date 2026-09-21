@@ -1,5 +1,11 @@
 terraform {
   required_version = ">= 1.9"
+
+  backend "gcs" {
+    bucket = "curious-helix-475013-b1-tfstate"
+    prefix = "infra"
+  }
+
   required_providers {
     google = {
       source  = "hashicorp/google"
@@ -101,7 +107,11 @@ resource "google_cloud_run_v2_service" "server" {
 
   lifecycle {
     # CI deploys new images; Terraform must not roll them back.
-    ignore_changes = [template[0].containers[0].image]
+    ignore_changes = [
+      template[0].containers[0].image,
+      client,
+      client_version,
+    ]
   }
 
   depends_on = [google_project_service.required]

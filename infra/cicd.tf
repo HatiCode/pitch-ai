@@ -57,11 +57,11 @@ resource "google_service_account_iam_member" "deployer_wif" {
 
 resource "google_project_iam_member" "deployer" {
   for_each = toset([
-    "roles/run.developer",              # deploy revisions, not manage IAM
-    "roles/cloudbuild.builds.editor",   # submit builds
-    "roles/artifactregistry.writer",    # push the image
-    "roles/storage.admin",              # Cloud Build's source staging bucket
-    "roles/logging.viewer",             # read build logs
+    "roles/run.developer",            # deploy revisions, not manage IAM
+    "roles/cloudbuild.builds.editor", # submit builds
+    "roles/artifactregistry.writer",  # push the image
+    "roles/storage.admin",            # Cloud Build's source staging bucket
+    "roles/logging.viewer",           # read build logs
   ])
   project = var.project_id
   role    = each.value
