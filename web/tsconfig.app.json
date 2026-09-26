@@ -6,7 +6,7 @@
 		"module": "esnext",
 		// "node" is here for the test files under src: the golden parity suite
 		// reads testdata/golden from disk, which the browser build never does.
-		"types": ["vite/client", "vite-plugin-pwa/client", "node"],
+		"types": ["vite/client", "node"],
 		"allowArbitraryExtensions": true,
 		"skipLibCheck": true,
 

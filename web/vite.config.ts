@@ -9,6 +9,13 @@ export default defineConfig({
 		tailwindcss(),
 		VitePWA({
 			registerType: "autoUpdate",
+			// The registration goes in its own script tag rather than into the
+			// app bundle. The service worker is what makes the app load at all
+			// without a network, so it must not depend on the bundle evaluating:
+			// a throw anywhere in the import graph — a missing Firebase config,
+			// say — would otherwise take offline capability with it, silently and
+			// permanently.
+			injectRegister: "script",
 			manifest: {
 				name: "pitch-ai",
 				short_name: "pitch-ai",
@@ -30,6 +37,13 @@ export default defineConfig({
 				],
 			},
 			workbox: {
+				// The plugin only sets these itself for injectRegister "auto", so
+				// choosing "script" above opts out of them. Without clientsClaim
+				// the worker does not control the page that registered it, and the
+				// first visit — the one before a coach ever goes offline — would
+				// have no service worker serving it.
+				clientsClaim: true,
+				skipWaiting: true,
 				globPatterns: ["**/*.{js,css,html,svg,png,webmanifest}"],
 				navigateFallback: "/index.html",
 				// The API is never cached. Offline reads come from IndexedDB, which
