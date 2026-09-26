@@ -1150,7 +1150,7 @@ Commit message: `feat(web): TypeScript fold pinned to the shared golden fixtures
   - `Sync{ start(), stop(), push(), pull(), subscribe(cb) }`
   - `SyncStatus{ state: "offline" | "pending" | "syncing" | "synced" | "error"; pending: number; error: string | null }`
 
-- [ ] **Step 1: Write the failing sync test**
+- [x] **Step 1: Write the failing sync test**
 
 Create `web/src/lib/sync.test.ts` with a stub `apiFetch` that records calls and can be told to fail. Use `vi.useFakeTimers()`; no test waits on real time.
 
@@ -1164,12 +1164,12 @@ Create `web/src/lib/sync.test.ts` with a stub `apiFetch` that records calls and 
 8. **`subscribe` fires on every status change** and the returned function unsubscribes.
 9. **`stop` cancels the interval** and no further calls happen.
 
-- [ ] **Step 2: Run it to verify it fails**
+- [x] **Step 2: Run it to verify it fails**
 
 Run: `cd web && npm test -- --run sync`
 Expected: FAIL — cannot resolve `./sync`.
 
-- [ ] **Step 3: Implement `sync.ts`**
+- [x] **Step 3: Implement `sync.ts`**
 
 Push before pull on every cycle, so a coach's own taps leave the device at the first opportunity. Trigger a cycle on: `start()`, a 10-second interval, the `online` event, `visibilitychange` to visible, and an explicit call after each append. Guard re-entrancy with an in-flight flag — an interval firing during a slow push must not double-send.
 
@@ -1179,12 +1179,12 @@ Push before pull on every cycle, so a coach's own taps leave the device at the f
 // no "did that send?" ambiguity — the worst case of a retry is a wasted write.
 ```
 
-- [ ] **Step 4: Run the tests to verify they pass**
+- [x] **Step 4: Run the tests to verify they pass**
 
 Run: `cd web && npm test -- --run`
 Expected: PASS.
 
-- [ ] **Step 5: Stage the work**
+- [x] **Step 5: Stage the work**
 
 ```bash
 git add web/src/lib/sync.ts web/src/lib/sync.test.ts

@@ -6,12 +6,18 @@ import { uuidv7 } from "./uuid";
 // writes here first and the UI renders from here, so the app behaves the same
 // way with signal and without.
 
-// LocalEvent is an event plus the two things only the device needs to know:
-// which match it belongs to, and whether the server has it yet.
+// LocalEvent is an event plus what only the device needs to know: which match
+// it belongs to, whether the server has it yet, and why the server refused it
+// if it did.
 //
 // synced is 0 or 1 rather than a boolean because IndexedDB cannot index
 // booleans, and the outbox query is an index lookup on [matchId+synced].
-export type LocalEvent = Event & { matchId: string; synced: 0 | 1 };
+// rejected is not indexed, so it can be the reason itself rather than a flag.
+export type LocalEvent = Event & {
+	matchId: string;
+	synced: 0 | 1;
+	rejected?: string;
+};
 
 type MetaRow = { key: string; value: string };
 
@@ -82,7 +88,14 @@ export async function localEvents(matchId: string): Promise<Event[]> {
 	return rows.map(toEvent);
 }
 
-/** Returns the next events to push, oldest first. */
+/**
+ * Returns the next events to push, oldest first.
+ *
+ * Rejected events are skipped rather than retried. The server refused them for
+ * a reason that will not change on the next attempt, and one poison tap that
+ * kept its place at the front of the queue would stop every later tap from
+ * ever reaching the server.
+ */
 export async function unsyncedEvents(
 	matchId: string,
 	limit: number,
@@ -91,12 +104,29 @@ export async function unsyncedEvents(
 		.where("[matchId+synced]")
 		.equals([matchId, 0])
 		.sortBy("id");
-	return rows.slice(0, limit).map(toEvent);
+	return rows
+		.filter((row) => !row.rejected)
+		.slice(0, limit)
+		.map(toEvent);
 }
 
 /** Marks a pushed batch as no longer owed to the server. */
 export async function markSynced(ids: string[]): Promise<void> {
 	await db.events.where("id").anyOf(ids).modify({ synced: 1 });
+}
+
+/**
+ * Records that the server refused these events, and why.
+ *
+ * The rows stay in the log: it is append-only, and a tap that vanished without
+ * trace would leave a coach with numbers they cannot explain. They simply stop
+ * being owed to the server.
+ */
+export async function markRejected(
+	ids: string[],
+	reason: string,
+): Promise<void> {
+	await db.events.where("id").anyOf(ids).modify({ rejected: reason });
 }
 
 /**
@@ -160,6 +190,11 @@ export async function cachedCatalogue(): Promise<CatalogueEntry[]> {
 }
 
 /** Strips the device-only columns, so callers see the event the server sees. */
-function toEvent({ matchId: _matchId, synced: _synced, ...event }: LocalEvent) {
+function toEvent({
+	matchId: _matchId,
+	synced: _synced,
+	rejected: _rejected,
+	...event
+}: LocalEvent) {
 	return event;
 }

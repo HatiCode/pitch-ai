@@ -12,6 +12,7 @@ import {
 	deviceId,
 	getCursor,
 	localEvents,
+	markRejected,
 	markSynced,
 	putServerEvents,
 	setCursor,
@@ -81,6 +82,23 @@ describe("the event log", () => {
 
 		expect(await localEvents(MATCH)).toHaveLength(1);
 		expect(await unsyncedEvents(MATCH, 10)).toEqual([]);
+	});
+
+	// A tap the server refuses is a permanent failure: retrying it forever would
+	// block every later tap from ever syncing. It leaves the outbox but stays in
+	// the log carrying why, because a silently vanished tap is worse than a
+	// visible error.
+	it("takes a rejected event out of the outbox without losing it", async () => {
+		await appendEvent(MATCH, tackle("e1", 1000));
+		await appendEvent(MATCH, tackle("e2", 2000));
+
+		await markRejected(["e1"], "playerId: not in the squad");
+
+		expect((await unsyncedEvents(MATCH, 10)).map((e) => e.id)).toEqual(["e2"]);
+		expect((await localEvents(MATCH)).map((e) => e.id)).toEqual(["e1", "e2"]);
+		expect((await db.events.get("e1"))?.rejected).toBe(
+			"playerId: not in the squad",
+		);
 	});
 
 	it("stores events that only ever came from the server", async () => {
