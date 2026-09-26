@@ -203,6 +203,20 @@ func writeGroups(positions []string) error {
 	for _, p := range core.AllPositions() {
 		fmt.Fprintf(&b, "\t%q: %q,\n", string(p), string(p.Group()))
 	}
+	b.WriteString("};\n\n")
+
+	// The TypeScript fold seeds a starter's position from their jersey, exactly
+	// as the Go fold does. Walking upwards until core stops recognising a number
+	// takes the range from core's own table rather than repeating "1 to 15" in a
+	// second place that could drift.
+	b.WriteString("export const POSITION_OF_JERSEY: Record<number, Position> = {\n")
+	for jersey := 1; ; jersey++ {
+		position, err := core.PositionForJersey(jersey)
+		if err != nil {
+			break
+		}
+		fmt.Fprintf(&b, "\t%d: %q,\n", jersey, string(position))
+	}
 	b.WriteString("};\n")
 
 	return os.WriteFile(groupsPath, []byte(b.String()), 0o644)

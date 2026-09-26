@@ -4,7 +4,9 @@
 		"target": "es2023",
 		"lib": ["ES2023", "DOM"],
 		"module": "esnext",
-		"types": ["vite/client", "vite-plugin-pwa/client"],
+		// "node" is here for the test files under src: the golden parity suite
+		// reads testdata/golden from disk, which the browser build never does.
+		"types": ["vite/client", "vite-plugin-pwa/client", "node"],
 		"allowArbitraryExtensions": true,
 		"skipLibCheck": true,
 

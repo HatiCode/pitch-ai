@@ -1,0 +1,118 @@
+{
+  "name": "every scoring kind the earlier fixtures leave out, and the set piece kinds that belong to the team rather than a player",
+  "match": {
+    "id": "match-golden-07",
+    "teamId": "team-1",
+    "seasonId": "2026-27",
+    "opponent": "Lansdowne",
+    "kickoffAt": "2026-09-19T14:00:00Z",
+    "venue": "home",
+    "status": "scheduled",
+    "lineup": {
+      "starters": [
+        { "jersey": 2, "playerId": "p2" },
+        { "jersey": 10, "playerId": "p10" },
+        { "jersey": 15, "playerId": "p15" }
+      ],
+      "bench": []
+    }
+  },
+  "events": [
+    { "id": "0192f107-0000-7000-8000-000000000001", "kind": "period_started", "clockMs": 0, "period": 1, "deviceId": "device-1" },
+    { "id": "0192f107-0000-7000-8000-000000000002", "kind": "lineout_won", "playerId": "p2", "clockMs": 60000, "period": 1, "deviceId": "device-1" },
+    { "id": "0192f107-0000-7000-8000-000000000003", "kind": "maul_from_lineout", "clockMs": 70000, "period": 1, "deviceId": "device-1" },
+    { "id": "0192f107-0000-7000-8000-000000000004", "kind": "drop_goal", "playerId": "p10", "clockMs": 120000, "period": 1, "deviceId": "device-1" },
+    { "id": "0192f107-0000-7000-8000-000000000005", "kind": "opposition_penalty", "clockMs": 180000, "period": 1, "deviceId": "device-1" },
+    { "id": "0192f107-0000-7000-8000-000000000006", "kind": "conversion_missed", "playerId": "p10", "clockMs": 240000, "period": 1, "deviceId": "device-1" },
+    { "id": "0192f107-0000-7000-8000-000000000007", "kind": "restart_lost", "clockMs": 300000, "period": 1, "deviceId": "device-1" },
+    { "id": "0192f107-0000-7000-8000-000000000008", "kind": "opposition_drop", "clockMs": 360000, "period": 1, "deviceId": "device-1" },
+    { "id": "0192f107-0000-7000-8000-000000000009", "kind": "match_ended", "clockMs": 600000, "period": 1, "deviceId": "device-1" }
+  ],
+  "expected": {
+    "status": "completed",
+    "period": 1,
+    "clockMs": 600000,
+    "running": false,
+    "score": {
+      "us": 3,
+      "them": 6
+    },
+    "zone": "our_half",
+    "possession": "us",
+    "territoryMs": {
+      "our_half": 600000
+    },
+    "possessionMs": {
+      "us": 600000
+    },
+    "counts": {
+      "conversion_missed": 1,
+      "drop_goal": 1,
+      "lineout_won": 1,
+      "maul_from_lineout": 1,
+      "opposition_drop": 1,
+      "opposition_penalty": 1,
+      "restart_lost": 1
+    },
+    "players": {
+      "p10": {
+        "playerId": "p10",
+        "jersey": 10,
+        "position": "fly_half",
+        "group": "half_backs",
+        "onPitch": true,
+        "minutesMs": 600000,
+        "counts": {
+          "conversion_missed": 1,
+          "drop_goal": 1
+        }
+      },
+      "p15": {
+        "playerId": "p15",
+        "jersey": 15,
+        "position": "fullback",
+        "group": "back_three",
+        "onPitch": true,
+        "minutesMs": 600000,
+        "counts": {}
+      },
+      "p2": {
+        "playerId": "p2",
+        "jersey": 2,
+        "position": "hooker",
+        "group": "front_row",
+        "onPitch": true,
+        "minutesMs": 600000,
+        "counts": {
+          "lineout_won": 1
+        }
+      }
+    },
+    "slices": [
+      {
+        "fromMs": 0,
+        "toMs": 1200000,
+        "score": {
+          "us": 3,
+          "them": 6
+        },
+        "territoryMs": {
+          "our_half": 600000
+        },
+        "possessionMs": {
+          "us": 600000
+        },
+        "counts": {
+          "conversion_missed": 1,
+          "drop_goal": 1,
+          "lineout_won": 1,
+          "maul_from_lineout": 1,
+          "opposition_drop": 1,
+          "opposition_penalty": 1,
+          "restart_lost": 1
+        }
+      }
+    ],
+    "voidedIds": []
+  }
+}

@@ -42,3 +42,21 @@ export const GROUP_OF_POSITION: Record<Position, PositionGroup> = {
 	outside_centre: "centres",
 	fullback: "back_three",
 };
+
+export const POSITION_OF_JERSEY: Record<number, Position> = {
+	1: "loosehead",
+	2: "hooker",
+	3: "tighthead",
+	4: "lock",
+	5: "lock",
+	6: "blindside",
+	7: "openside",
+	8: "number_eight",
+	9: "scrum_half",
+	10: "fly_half",
+	11: "wing",
+	12: "inside_centre",
+	13: "outside_centre",
+	14: "wing",
+	15: "fullback",
+};

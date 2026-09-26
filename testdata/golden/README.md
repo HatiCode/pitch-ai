@@ -42,6 +42,7 @@ half, a stoppage — the IDs are what make the intended order the actual order.
 | `04-sub-and-cards.json` | A substitution splitting minutes and passing on a position; a yellow card spending ten minutes of running clock across a stoppage; a red card that never returns |
 | `05-void.json` | A void removing a count, a void removing a try from the scoreline, a void undoing a substitution, and `voidedIds` |
 | `06-territory-and-slices.json` | Zone and possession spans split across a 20-minute boundary, and a toggle during a stoppage that changes the zone without accruing time |
+| `07-scoring-and-attribution.json` | The scoring kinds the other files leave out — drop goal, missed conversion, their penalty and drop — and the set piece kinds counted for the team rather than a player |
 
 ## Changing a fixture
 

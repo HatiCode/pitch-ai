@@ -1086,7 +1086,7 @@ Commit message: `feat(web): local event store and UUIDv7 generation`
 **Interfaces:**
 - Produces: `fold(match: Match, events: Event[]): MatchState`, using the generated types from `web/src/types/core.ts` — no hand-written parallel type definitions.
 
-- [ ] **Step 1: Write the failing golden parity test**
+- [x] **Step 1: Write the failing golden parity test**
 
 Create `web/src/lib/fold.golden.test.ts`:
 
@@ -1101,12 +1101,12 @@ Assert the file count is greater than zero, for the same reason the Go runner do
 
 The round-trip is not ceremony: it is what makes `undefined` versus a missing key, and a `Map` versus an object, fail here rather than in a report three milestones later.
 
-- [ ] **Step 2: Run it to verify it fails**
+- [x] **Step 2: Run it to verify it fails**
 
 Run: `cd web && npm test -- --run fold`
 Expected: FAIL — cannot resolve `./fold`.
 
-- [ ] **Step 3: Implement `fold.ts`**
+- [x] **Step 3: Implement `fold.ts`**
 
 Mirror `internal/core/stats.go` pass for pass and name for name — `voidedIds`, `sortedLive`, `addSpan`, the same local variables in the same order. The two implementations will be read side by side every time a fixture disagrees, and a clever TypeScript rewrite makes that comparison expensive for no gain.
 
@@ -1118,18 +1118,18 @@ Three parity traps to handle explicitly, each with a comment:
 
 Keep the semantics — points per kind, which kinds are cards, subs and toggles — in this file rather than reading them from the served catalogue. The catalogue is presentation configuration and a client may hold a stale copy; the fold's behaviour must not depend on it.
 
-- [ ] **Step 4: Write a small set of TypeScript-only unit tests**
+- [x] **Step 4: Write a small set of TypeScript-only unit tests**
 
 Create `web/src/lib/fold.test.ts` for the two things fixtures cannot pin: that `fold` on an empty log returns a usable state for a match with no lineup at all (the tagging screen renders before an XV is picked), and that it does not mutate its `events` argument (the caller is passing a live Dexie query result).
 
-- [ ] **Step 5: Run the tests to verify they pass**
+- [x] **Step 5: Run the tests to verify they pass**
 
 Run: `cd web && npm test -- --run`
 Expected: PASS, with all six golden fixtures listed by name.
 
 If a fixture disagrees, **fix the fold, not the fixture** — unless re-reading the Go implementation shows Go is the one that is wrong, in which case fix Go, re-bless that fixture, and note it in the commit message.
 
-- [ ] **Step 6: Stage the work**
+- [x] **Step 6: Stage the work**
 
 ```bash
 git add web/src/lib/fold.ts web/src/lib/fold.test.ts web/src/lib/fold.golden.test.ts
