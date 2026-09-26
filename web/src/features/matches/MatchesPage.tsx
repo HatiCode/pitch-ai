@@ -113,6 +113,16 @@ export function MatchesPage() {
 								{lineupSummary(match)}
 							</p>
 						</div>
+						{/* Tagging needs a side. A half-filled lineup would give every
+						    count a home but no minutes to divide between them. */}
+						{match.lineup?.starters?.length === 15 && (
+							<Link
+								to={`/squads/${teamId}/matches/${match.id}/tag`}
+								className="rounded bg-slate-900 px-4 py-2 text-sm font-semibold text-white"
+							>
+								Tag
+							</Link>
+						)}
 						{canEdit && (
 							<button
 								type="button"

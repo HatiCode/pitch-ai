@@ -1205,7 +1205,7 @@ Commit message: `feat(web): outbox sync with cursor pull and backoff`
 
 Layout, per spec section 7: iPad landscape, dual pane, **no modals**. Left is the squad as numbered tiles with the bench visually distinct; right is the action pane with three tabs; the top strip carries clock, score, sync status, the zone/possession toggles and the score strip; the bottom strip is recent events with a single-tap Undo.
 
-- [ ] **Step 1: Write the failing interaction test**
+- [x] **Step 1: Write the failing interaction test**
 
 Create `web/src/features/tagging/useTagging.test.ts`. This is the muscle-memory contract, so test it as a state machine rather than through the DOM:
 
@@ -1225,16 +1225,16 @@ Create `web/src/features/tagging/useTagging.test.ts`. This is the muscle-memory 
 14. **Zone and possession toggles append `zone_changed` carrying both values**, because the event is full state rather than a delta.
 15. **Every appended event carries this device's ID, the current period and the current clock.**
 
-- [ ] **Step 2: Run it to verify it fails**
+- [x] **Step 2: Run it to verify it fails**
 
 Run: `cd web && npm test -- --run tagging`
 Expected: FAIL — cannot resolve `./useTagging`.
 
-- [ ] **Step 3: Implement `api.ts` and cache priming**
+- [x] **Step 3: Implement `api.ts` and cache priming**
 
 `useCatalogue()` and `usePrimedMatch(teamId, matchId)`: fetch from the API when online, write straight into Dexie, and read through `useLiveQuery` so the components only ever render local state. On a cold offline start the fetch fails and the cached copy renders — which is the whole point, so the fetch failure must not surface as an error when a cached copy exists.
 
-- [ ] **Step 4: Implement `useTagging.ts`**
+- [x] **Step 4: Implement `useTagging.ts`**
 
 ```ts
 // Two taps in either order, because on a sideline the coach's eyes are on the
@@ -1250,7 +1250,7 @@ The anchor itself is never synced — it is a wall-clock detail, and `ClockMs` s
 
 Stop the clock automatically when the running clock reaches 40:00 and 80:00, appending one `clock_paused`. This is what a referee's clock does, it removes a tap at the busiest moment of the half, and per decision 3 it is what keeps `ClockMs` monotonic when the half plays on past 40:00. Guard it so it fires once per boundary rather than once per tick. If it proves wrong in a real match, deleting the effect is a self-contained change — which is the test of whether a behaviour like this belongs in the UI rather than the fold.
 
-- [ ] **Step 5: Implement the components**
+- [x] **Step 5: Implement the components**
 
 Fixed button positions are the requirement; nothing may reflow as state changes. Tailwind utility classes only, matching the existing pages — no scoped styles, no new colour values outside the `slate`/`red` palette already in use.
 
@@ -1261,20 +1261,20 @@ Fixed button positions are the requirement; nothing may reflow as state changes.
 - `ActionPane` — three tabs from the catalogue's `play`, `set_piece` and `discipline` groups, in served order. Render the armed action as pressed. Never re-order buttons based on frequency of use: predictable position is the feature.
 - `RecentEvents` — the last eight live events, newest first, with one Undo button.
 
-- [ ] **Step 6: Add the route and the entry point**
+- [x] **Step 6: Add the route and the entry point**
 
 Route in `main.tsx`; a "Tag" link on each fixture in `MatchesPage.tsx`, shown only when the lineup has 15 starters — there is nothing to tag without a side, and a half-filled lineup would give every count a home but no minutes.
 
-- [ ] **Step 7: Write the page smoke test**
+- [x] **Step 7: Write the page smoke test**
 
 `TaggingPage.test.tsx`: renders with a seeded Dexie database and no network, shows 23 tiles, and tagging a tackle updates the tile's count. One test, proving the wiring; the behaviour is covered in step 1.
 
-- [ ] **Step 8: Run everything**
+- [x] **Step 8: Run everything**
 
 Run: `cd web && npx biome ci . && npm run typecheck && npm test -- --run`
 Expected: PASS.
 
-- [ ] **Step 9: Stage the work**
+- [x] **Step 9: Stage the work**
 
 ```bash
 git add web/src/features/tagging web/src/main.tsx web/src/features/matches/MatchesPage.tsx
