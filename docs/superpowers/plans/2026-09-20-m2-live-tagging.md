@@ -999,7 +999,7 @@ Commit message: `feat(web): installable PWA shell that loads offline`
   - `putServerEvents(matchId, events)`, `getCursor(matchId)`, `setCursor(matchId, cursor)`
   - `cacheMatch(match)`, `cachedMatch(matchId)`, `cachePlayers(players)`, `cachedPlayers()`, `cacheCatalogue(entries)`, `cachedCatalogue()`
 
-- [ ] **Step 1: Add the dependencies**
+- [x] **Step 1: Add the dependencies**
 
 ```bash
 cd web && npm install dexie dexie-react-hooks && npm install -D fake-indexeddb
@@ -1007,7 +1007,7 @@ cd web && npm install dexie dexie-react-hooks && npm install -D fake-indexeddb
 
 Register `fake-indexeddb/auto` in `web/src/setupTests.ts` — jsdom has no IndexedDB.
 
-- [ ] **Step 2: Write the failing UUIDv7 test**
+- [x] **Step 2: Write the failing UUIDv7 test**
 
 Create `web/src/lib/uuid.test.ts`:
 
@@ -1018,11 +1018,11 @@ Create `web/src/lib/uuid.test.ts`:
 
 Time-ordered IDs are what let the fold sort a log from two devices without coordination, so the ordering property is the one that actually matters.
 
-- [ ] **Step 3: Implement `uuidv7`**
+- [x] **Step 3: Implement `uuidv7`**
 
 48 bits of Unix milliseconds, version nibble 7, variant bits `10`, the rest from `crypto.getRandomValues`. Keep a module-level counter in the low bits of the random block for same-millisecond monotonicity, and note in a comment that it resets per page load — which is fine, because ordering only needs to be consistent, not globally unique across reloads.
 
-- [ ] **Step 4: Write the failing database test**
+- [x] **Step 4: Write the failing database test**
 
 Create `web/src/lib/db.test.ts`, clearing the database between cases:
 
@@ -1033,7 +1033,7 @@ Create `web/src/lib/db.test.ts`, clearing the database between cases:
 5. `deviceId` is stable across calls and across a fresh database handle.
 6. The cursor and the cached catalogue round-trip.
 
-- [ ] **Step 5: Implement `db.ts`**
+- [x] **Step 5: Implement `db.ts`**
 
 ```ts
 // IndexedDB is the application's state, not a cache in front of it. Every tap
@@ -1063,12 +1063,12 @@ type LocalEvent = Event & { matchId: string; synced: 0 | 1 };
 
 There is no separate outbox table: the `synced` flag on the event row *is* the outbox. One table means one write per tap and no chance of the two drifting.
 
-- [ ] **Step 6: Run the tests to verify they pass**
+- [x] **Step 6: Run the tests to verify they pass**
 
 Run: `cd web && npm test -- --run`
 Expected: PASS.
 
-- [ ] **Step 7: Stage the work**
+- [x] **Step 7: Stage the work**
 
 ```bash
 git add web/package.json web/package-lock.json web/src/setupTests.ts web/src/lib/db.ts web/src/lib/db.test.ts web/src/lib/uuid.ts web/src/lib/uuid.test.ts
