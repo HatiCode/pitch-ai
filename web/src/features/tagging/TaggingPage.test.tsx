@@ -105,7 +105,12 @@ describe("the tagging screen", () => {
 			expect(screen.getByTestId("player-p7")).toBeInTheDocument(),
 		);
 
-		await user.click(screen.getByRole("button", { name: "Tackle made" }));
+		// The catalogue arrives on its own live query, so the action pane can
+		// still be empty when the squad has rendered. findBy retries; getBy
+		// would be a coin flip.
+		await user.click(
+			await screen.findByRole("button", { name: "Tackle made" }),
+		);
 		await user.click(screen.getByTestId("player-p7"));
 
 		await waitFor(() =>

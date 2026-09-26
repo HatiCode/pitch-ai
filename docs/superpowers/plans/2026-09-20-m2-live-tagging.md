@@ -1349,7 +1349,7 @@ Commit message: `test(web): end-to-end offline tagging and sync`
 **Files:**
 - Modify: `Makefile` (a `test-e2e` target), `docs/superpowers/plans/2026-09-20-m2-live-tagging.md` (check the boxes)
 
-- [ ] **Step 1: Run the whole suite**
+- [x] **Step 1: Run the whole suite**
 
 ```bash
 go test ./... -race
@@ -1358,7 +1358,7 @@ make types && git diff --exit-code web/src/types
 cd web && npx biome ci . && npm run typecheck && npm test -- --run && npm run test:e2e
 ```
 
-- [ ] **Step 2: Add a `test-e2e` target to the Makefile**
+- [x] **Step 2: Add a `test-e2e` target to the Makefile**
 
 Next to `test-web`, so the full local suite is discoverable from one file.
 
@@ -1380,7 +1380,7 @@ On the iPad, on the deployed URL:
 
 The last check is the one that matters: the same log folded in two languages on two devices agreeing is the claim M2 exists to make.
 
-- [ ] **Step 5: Stage the work**
+- [x] **Step 5: Stage the work**
 
 ```bash
 git add Makefile docs/superpowers/plans/2026-09-20-m2-live-tagging.md

@@ -1,4 +1,4 @@
-.PHONY: test test-go test-web test-store build web run fmt types emulator deploy
+.PHONY: test test-go test-web test-e2e test-store build web run fmt types emulator deploy
 
 REGION ?= europe-west1
 SERVICE ?= pitch-ai
@@ -12,6 +12,12 @@ test-go:
 
 test-web:
 	cd web && npm test -- --run
+
+# Builds the app and drives a real browser, so it is not part of `make test`.
+# Needs the chromium Playwright downloads: `cd web && npx playwright install
+# chromium` once per machine.
+test-e2e:
+	cd web && npm run test:e2e
 
 # Store tests need the Firestore emulator; run `make emulator` in another shell.
 test-store:
