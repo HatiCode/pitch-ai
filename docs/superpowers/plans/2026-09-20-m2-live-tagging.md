@@ -570,7 +570,7 @@ The contract that stops the two folds from drifting. Written before the TypeScri
 **Interfaces:**
 - Produces: a JSON fixture format both test suites read.
 
-- [ ] **Step 1: Define the fixture format**
+- [x] **Step 1: Define the fixture format**
 
 Create `testdata/golden/README.md` documenting the shape and the rule that both suites must load every file in the directory, so adding a fixture extends both languages' coverage at once:
 
@@ -590,7 +590,7 @@ Create `testdata/golden/README.md` documenting the shape and the rule that both 
 }
 ```
 
-- [ ] **Step 2: Write the failing golden runner**
+- [x] **Step 2: Write the failing golden runner**
 
 Create `internal/core/golden_test.go`:
 
@@ -599,12 +599,12 @@ Create `internal/core/golden_test.go`:
 - `Fold`, marshal the result, and compare against `expected` **after canonicalising both sides** through `map[string]any` round-trips so key order and whitespace do not matter. Use `reflect.DeepEqual` on the decoded maps and, on failure, print both re-marshalled with `json.MarshalIndent` — a diff of two 40-line objects is the only way this failure is debuggable.
 - Fail the whole test if the directory is empty or unreadable. A golden suite that silently runs zero cases is worse than no suite.
 
-- [ ] **Step 3: Run it to verify it fails**
+- [x] **Step 3: Run it to verify it fails**
 
 Run: `go test ./internal/core/ -run Golden`
 Expected: FAIL — no fixtures yet.
 
-- [ ] **Step 4: Write the fixtures**
+- [x] **Step 4: Write the fixtures**
 
 Six files, each the smallest log that pins one behaviour. Generate the `expected` blocks by writing the fixture with an empty `expected`, running the runner with a temporary flag or a `t.Log` of the marshalled state, and pasting the result back — then **read it and check it by hand against the rugby**, because a golden file blessed without being read pins a bug in two languages instead of one.
 
@@ -617,12 +617,12 @@ Six files, each the smallest log that pins one behaviour. Generate the `expected
 | `05-void.json` | A void removing a count, a void removing a try from the score, and `voidedIds` |
 | `06-territory-and-slices.json` | Zone and possession spans crossing a 20-minute boundary in both directions |
 
-- [ ] **Step 5: Run the runner to verify it passes**
+- [x] **Step 5: Run the runner to verify it passes**
 
 Run: `go test ./internal/core/ -run Golden -v`
 Expected: PASS, with six named subtests listed. Confirm all six appear — a typo'd glob that matches nothing still passes a poorly written runner, which step 2's empty-directory guard exists to prevent.
 
-- [ ] **Step 6: Stage the work**
+- [x] **Step 6: Stage the work**
 
 ```bash
 git add testdata/golden internal/core/golden_test.go
@@ -653,11 +653,11 @@ Commit message: `test(core): golden fold fixtures shared with the web client`
 
 Five constructor arguments is at the edge of comfortable, but each interface is one or two methods and the alternative is a `Repository` with nine. `main.go` passes the same `*firestore.Store` five times, which is exactly what structural satisfaction is for.
 
-- [ ] **Step 1: Write the in-memory stores**
+- [x] **Step 1: Write the in-memory stores**
 
 Create `internal/match/memstore_test.go`, following `internal/squad/memstore_test.go`: keyed by club so the tests can prove tenant isolation. The event store keeps an insertion-ordered slice per match and a monotonic counter for the cursor, upserting by event ID so the idempotency test has something real to exercise. Expose a `putErr error` field so the failure paths can be tested without a mock framework.
 
-- [ ] **Step 2: Write the failing service test**
+- [x] **Step 2: Write the failing service test**
 
 Create `internal/match/service_test.go`:
 
@@ -673,12 +673,12 @@ Create `internal/match/service_test.go`:
 10. **Events since a cursor returns only later events** and a cursor that advances; an empty log returns an empty slice and an empty cursor, never nil.
 11. **A store failure on the derived write fails the call** — after the events are already durable. Assert the error wraps and mentions the stats write, so the log says which half failed.
 
-- [ ] **Step 3: Run the test to verify it fails**
+- [x] **Step 3: Run the test to verify it fails**
 
 Run: `go test ./internal/match/`
 Expected: FAIL — `undefined: NewService`.
 
-- [ ] **Step 4: Implement the service**
+- [x] **Step 4: Implement the service**
 
 ```go
 // Package match holds the live-tagging use-cases: appending to a match's event
@@ -705,12 +705,12 @@ func (s *Service) Append(ctx context.Context, clubID, teamID, matchID string, ev
 
 Validate the entire batch before writing any of it: a half-applied batch would be indistinguishable from a partial sync and would have the client retrying events the server already rejected.
 
-- [ ] **Step 5: Run the tests to verify they pass**
+- [x] **Step 5: Run the tests to verify they pass**
 
 Run: `go test ./internal/match/ -race`
 Expected: PASS.
 
-- [ ] **Step 6: Stage the work**
+- [x] **Step 6: Stage the work**
 
 ```bash
 git add internal/match

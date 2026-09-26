@@ -518,6 +518,81 @@ export const Centres: PositionGroup = "centres";
 export const BackThree: PositionGroup = "back_three";
 
 //////////
+// source: stats.go
+
+/**
+ * SliceDurationMs is the width of a time-slice bucket. ClockMs is continuous from
+ * kick-off, so bucketing every metric into 20-minute blocks is one grouping here
+ * and needs no extra data, no extra writes and no schema change.
+ */
+export const SliceDurationMs = 20 * 60 * 1000;
+export interface Score {
+	us: number /* int */;
+	them: number /* int */;
+}
+/**
+ * PlayerStats is one player's contribution to one match. Counts holds only
+ * non-zero entries, so the Go and TypeScript folds serialise identically.
+ */
+export interface PlayerStats {
+	playerId: string;
+	jersey: number /* int */;
+	position: Position;
+	group: PositionGroup;
+	onPitch: boolean;
+	minutesMs: number /* int */;
+	counts: Partial<Record<EventKind, number /* int */>>;
+}
+/**
+ * Slice is one 20-minute block. Per-player slicing is deliberately absent: it is a
+ * season-view concern and would multiply this structure by 23 for no reader.
+ */
+export interface Slice {
+	fromMs: number /* int */;
+	toMs: number /* int */;
+	score: Score;
+	territoryMs: Partial<Record<Zone, number /* int */>>;
+	possessionMs: Partial<Record<Possession, number /* int */>>;
+	counts: Partial<Record<EventKind, number /* int */>>;
+}
+/**
+ * MatchState is the whole state of a match. It is derived, never stored as truth:
+ * void an event, re-fold, and every number below is correct by construction.
+ */
+export interface MatchState {
+	status: MatchStatus;
+	period: number /* int */;
+	clockMs: number /* int */;
+	running: boolean;
+	score: Score;
+	zone: Zone;
+	possession: Possession;
+	territoryMs: Partial<Record<Zone, number /* int */>>;
+	possessionMs: Partial<Record<Possession, number /* int */>>;
+	counts: Partial<Record<EventKind, number /* int */>>;
+	players: { [key: string]: PlayerStats };
+	slices: Slice[];
+	voidedIds: string[];
+}
+/**
+ * PlayerMatchStats is the derived per-player document. It denormalises team,
+ * season, player and date so a season trend or a squad comparison is a
+ * collection-group query rather than a rollup table that can go stale.
+ */
+export interface PlayerMatchStats {
+	playerId: string;
+	matchId: string;
+	teamId: string;
+	seasonId: string;
+	matchDate: string;
+	jersey: number /* int */;
+	position: Position;
+	group: PositionGroup;
+	minutesMs: number /* int */;
+	counts: { [key: string]: number /* int */ };
+}
+
+//////////
 // source: team.go
 
 /**

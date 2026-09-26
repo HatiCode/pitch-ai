@@ -1,0 +1,107 @@
+{
+  "name": "voids cancel a count, a score and a substitution; the events are listed out of order because the fold sorts them",
+  "match": {
+    "id": "match-golden-05",
+    "teamId": "team-1",
+    "seasonId": "2026-27",
+    "opponent": "Lansdowne",
+    "kickoffAt": "2026-09-19T14:00:00Z",
+    "venue": "home",
+    "status": "scheduled",
+    "lineup": {
+      "starters": [
+        { "jersey": 7, "playerId": "p7" },
+        { "jersey": 11, "playerId": "p11" }
+      ],
+      "bench": [{ "jersey": 18, "playerId": "p18" }]
+    }
+  },
+  "events": [
+    { "id": "0192f105-0000-7000-8000-00000000000a", "kind": "match_ended", "clockMs": 1200000, "period": 1, "deviceId": "device-1" },
+    { "id": "0192f105-0000-7000-8000-000000000005", "kind": "void", "clockMs": 200000, "period": 1, "voidsId": "0192f105-0000-7000-8000-000000000003", "deviceId": "device-1" },
+    { "id": "0192f105-0000-7000-8000-000000000002", "kind": "tackle_made", "playerId": "p7", "clockMs": 60000, "period": 1, "deviceId": "device-1" },
+    { "id": "0192f105-0000-7000-8000-000000000008", "kind": "sub", "clockMs": 600000, "period": 1, "payload": { "onPlayerId": "p18", "offPlayerId": "p7" }, "deviceId": "device-1" },
+    { "id": "0192f105-0000-7000-8000-000000000001", "kind": "period_started", "clockMs": 0, "period": 1, "deviceId": "device-1" },
+    { "id": "0192f105-0000-7000-8000-000000000007", "kind": "void", "clockMs": 310000, "period": 1, "voidsId": "0192f105-0000-7000-8000-000000000006", "deviceId": "device-1" },
+    { "id": "0192f105-0000-7000-8000-000000000004", "kind": "tackle_made", "playerId": "p7", "clockMs": 180000, "period": 1, "deviceId": "device-1" },
+    { "id": "0192f105-0000-7000-8000-000000000009", "kind": "void", "clockMs": 610000, "period": 1, "voidsId": "0192f105-0000-7000-8000-000000000008", "deviceId": "device-1" },
+    { "id": "0192f105-0000-7000-8000-000000000003", "kind": "tackle_made", "playerId": "p7", "clockMs": 120000, "period": 1, "deviceId": "device-2" },
+    { "id": "0192f105-0000-7000-8000-000000000006", "kind": "try", "playerId": "p11", "clockMs": 300000, "period": 1, "deviceId": "device-1" }
+  ],
+  "expected": {
+    "status": "completed",
+    "period": 1,
+    "clockMs": 1200000,
+    "running": false,
+    "score": {
+      "us": 0,
+      "them": 0
+    },
+    "zone": "our_half",
+    "possession": "us",
+    "territoryMs": {
+      "our_half": 1200000
+    },
+    "possessionMs": {
+      "us": 1200000
+    },
+    "counts": {
+      "tackle_made": 2
+    },
+    "players": {
+      "p11": {
+        "playerId": "p11",
+        "jersey": 11,
+        "position": "wing",
+        "group": "back_three",
+        "onPitch": true,
+        "minutesMs": 1200000,
+        "counts": {}
+      },
+      "p18": {
+        "playerId": "p18",
+        "jersey": 18,
+        "position": "",
+        "group": "",
+        "onPitch": false,
+        "minutesMs": 0,
+        "counts": {}
+      },
+      "p7": {
+        "playerId": "p7",
+        "jersey": 7,
+        "position": "openside",
+        "group": "back_row",
+        "onPitch": true,
+        "minutesMs": 1200000,
+        "counts": {
+          "tackle_made": 2
+        }
+      }
+    },
+    "slices": [
+      {
+        "fromMs": 0,
+        "toMs": 1200000,
+        "score": {
+          "us": 0,
+          "them": 0
+        },
+        "territoryMs": {
+          "our_half": 1200000
+        },
+        "possessionMs": {
+          "us": 1200000
+        },
+        "counts": {
+          "tackle_made": 2
+        }
+      }
+    ],
+    "voidedIds": [
+      "0192f105-0000-7000-8000-000000000003",
+      "0192f105-0000-7000-8000-000000000006",
+      "0192f105-0000-7000-8000-000000000008"
+    ]
+  }
+}

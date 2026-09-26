@@ -12,6 +12,8 @@ package main
 import (
 	"fmt"
 	"os"
+	"regexp"
+	"slices"
 	"strings"
 
 	"pitch-ai/internal/auth"
@@ -66,6 +68,7 @@ func narrow(path string, unions map[string][]string) error {
 	}
 	out := string(raw)
 
+	names := make([]string, 0, len(unions))
 	for name, values := range unions {
 		alias := fmt.Sprintf("export type %s = string;", name)
 		if !strings.Contains(out, alias) {
@@ -73,13 +76,58 @@ func narrow(path string, unions map[string][]string) error {
 		}
 		out = strings.Replace(out, alias,
 			fmt.Sprintf("export type %s = %s;", name, union(values)), 1)
+		names = append(names, name)
 	}
+	slices.Sort(names)
 
 	out = dropAnyAliases(out)
+	out = recordUnionKeys(out, names)
 	if err := assertNoWideAliases(path, out); err != nil {
 		return err
 	}
+	if err := assertNoUnionIndexSignatures(path, out, names); err != nil {
+		return err
+	}
 	return os.WriteFile(path, []byte(out), 0o644)
+}
+
+// recordUnionKeys rewrites the index signatures tygo emits for a Go map whose key
+// is one of the narrowed types.
+//
+// TypeScript rejects `{ [key: Zone]: number }` outright once Zone is a union of
+// literals rather than `string` — an index signature parameter cannot be a literal
+// type. Partial<Record<Zone, number>> is the correct spelling, and Partial is the
+// honest half of it: Fold writes only non-zero entries, so a caller has to handle a
+// key that is not there.
+func recordUnionKeys(src string, names []string) string {
+	for _, name := range names {
+		// Matched before Biome runs, so the spacing is tygo's own rather than the
+		// formatted spacing the committed file ends up with.
+		pattern := regexp.MustCompile(`\{\s*\[key:\s*` + regexp.QuoteMeta(name) + `\]:\s*([^{}]+?)\s*\}`)
+		src = pattern.ReplaceAllString(src, "Partial<Record<"+name+", $1>>")
+	}
+	return src
+}
+
+// assertNoUnionIndexSignatures fails when a narrowed type is still being used as an
+// index-signature key. The rewrite above depends on tygo's exact spacing, and a
+// silent miss would ship a file that only `tsc` rejects, in a later job.
+func assertNoUnionIndexSignatures(path, src string, names []string) error {
+	var broken []string
+	for _, name := range names {
+		if strings.Contains(src, "[key: "+name+"]") {
+			broken = append(broken, name)
+		}
+	}
+
+	if len(broken) > 0 {
+		return fmt.Errorf(
+			"%s: %s are still index-signature keys, which TypeScript rejects for a\n"+
+				"  literal union. gen-types rewrites these into Partial<Record<…>>;\n"+
+				"  did tygo change how it renders a Go map?",
+			path, strings.Join(broken, ", "))
+	}
+	return nil
 }
 
 // opaqueTypes are named Go string types that are deliberately left as `string`

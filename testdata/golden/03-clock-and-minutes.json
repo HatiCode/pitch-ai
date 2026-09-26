@@ -1,0 +1,148 @@
+{
+  "name": "the referee's clock stops for a stoppage and at 40:00, so period 2 resumes at 2400000 and the clock stays monotonic",
+  "match": {
+    "id": "match-golden-03",
+    "teamId": "team-1",
+    "seasonId": "2026-27",
+    "opponent": "Lansdowne",
+    "kickoffAt": "2026-09-19T14:00:00Z",
+    "venue": "away",
+    "status": "scheduled",
+    "lineup": {
+      "starters": [
+        { "jersey": 1, "playerId": "p1" },
+        { "jersey": 2, "playerId": "p2" },
+        { "jersey": 3, "playerId": "p3" }
+      ],
+      "bench": []
+    }
+  },
+  "events": [
+    { "id": "0192f103-0000-7000-8000-000000000001", "kind": "period_started", "clockMs": 0, "period": 1, "deviceId": "device-1" },
+    { "id": "0192f103-0000-7000-8000-000000000002", "kind": "clock_paused", "clockMs": 600000, "period": 1, "deviceId": "device-1" },
+    { "id": "0192f103-0000-7000-8000-000000000003", "kind": "clock_resumed", "clockMs": 600000, "period": 1, "deviceId": "device-1" },
+    { "id": "0192f103-0000-7000-8000-000000000004", "kind": "clock_paused", "clockMs": 2400000, "period": 1, "deviceId": "device-1" },
+    { "id": "0192f103-0000-7000-8000-000000000005", "kind": "tackle_made", "playerId": "p1", "clockMs": 2400000, "period": 1, "deviceId": "device-1" },
+    { "id": "0192f103-0000-7000-8000-000000000006", "kind": "period_ended", "clockMs": 2400000, "period": 1, "deviceId": "device-1" },
+    { "id": "0192f103-0000-7000-8000-000000000007", "kind": "period_started", "clockMs": 2400000, "period": 2, "deviceId": "device-1" },
+    { "id": "0192f103-0000-7000-8000-000000000008", "kind": "clock_paused", "clockMs": 4800000, "period": 2, "deviceId": "device-1" },
+    { "id": "0192f103-0000-7000-8000-000000000009", "kind": "match_ended", "clockMs": 4800000, "period": 2, "deviceId": "device-1" }
+  ],
+  "expected": {
+    "status": "completed",
+    "period": 2,
+    "clockMs": 4800000,
+    "running": false,
+    "score": {
+      "us": 0,
+      "them": 0
+    },
+    "zone": "our_half",
+    "possession": "us",
+    "territoryMs": {
+      "our_half": 4800000
+    },
+    "possessionMs": {
+      "us": 4800000
+    },
+    "counts": {
+      "tackle_made": 1
+    },
+    "players": {
+      "p1": {
+        "playerId": "p1",
+        "jersey": 1,
+        "position": "loosehead",
+        "group": "front_row",
+        "onPitch": true,
+        "minutesMs": 4800000,
+        "counts": {
+          "tackle_made": 1
+        }
+      },
+      "p2": {
+        "playerId": "p2",
+        "jersey": 2,
+        "position": "hooker",
+        "group": "front_row",
+        "onPitch": true,
+        "minutesMs": 4800000,
+        "counts": {}
+      },
+      "p3": {
+        "playerId": "p3",
+        "jersey": 3,
+        "position": "tighthead",
+        "group": "front_row",
+        "onPitch": true,
+        "minutesMs": 4800000,
+        "counts": {}
+      }
+    },
+    "slices": [
+      {
+        "fromMs": 0,
+        "toMs": 1200000,
+        "score": {
+          "us": 0,
+          "them": 0
+        },
+        "territoryMs": {
+          "our_half": 1200000
+        },
+        "possessionMs": {
+          "us": 1200000
+        },
+        "counts": {}
+      },
+      {
+        "fromMs": 1200000,
+        "toMs": 2400000,
+        "score": {
+          "us": 0,
+          "them": 0
+        },
+        "territoryMs": {
+          "our_half": 1200000
+        },
+        "possessionMs": {
+          "us": 1200000
+        },
+        "counts": {}
+      },
+      {
+        "fromMs": 2400000,
+        "toMs": 3600000,
+        "score": {
+          "us": 0,
+          "them": 0
+        },
+        "territoryMs": {
+          "our_half": 1200000
+        },
+        "possessionMs": {
+          "us": 1200000
+        },
+        "counts": {
+          "tackle_made": 1
+        }
+      },
+      {
+        "fromMs": 3600000,
+        "toMs": 4800000,
+        "score": {
+          "us": 0,
+          "them": 0
+        },
+        "territoryMs": {
+          "our_half": 1200000
+        },
+        "possessionMs": {
+          "us": 1200000
+        },
+        "counts": {}
+      }
+    ],
+    "voidedIds": []
+  }
+}

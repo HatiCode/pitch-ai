@@ -1,0 +1,186 @@
+{
+  "name": "a substitution splits minutes and passes on its position, a yellow costs ten minutes of running clock across a stoppage, and a red never returns",
+  "match": {
+    "id": "match-golden-04",
+    "teamId": "team-1",
+    "seasonId": "2026-27",
+    "opponent": "Lansdowne",
+    "kickoffAt": "2026-09-19T14:00:00Z",
+    "venue": "home",
+    "status": "scheduled",
+    "lineup": {
+      "starters": [
+        { "jersey": 1, "playerId": "p1" },
+        { "jersey": 2, "playerId": "p2" },
+        { "jersey": 7, "playerId": "p7" },
+        { "jersey": 10, "playerId": "p10" }
+      ],
+      "bench": [
+        { "jersey": 18, "playerId": "p18" },
+        { "jersey": 20, "playerId": "p20" }
+      ]
+    }
+  },
+  "events": [
+    { "id": "0192f104-0000-7000-8000-000000000001", "kind": "period_started", "clockMs": 0, "period": 1, "deviceId": "device-1" },
+    { "id": "0192f104-0000-7000-8000-000000000002", "kind": "yellow_card", "playerId": "p7", "clockMs": 600000, "period": 1, "deviceId": "device-1" },
+    { "id": "0192f104-0000-7000-8000-000000000003", "kind": "clock_paused", "clockMs": 900000, "period": 1, "deviceId": "device-1" },
+    { "id": "0192f104-0000-7000-8000-000000000004", "kind": "clock_resumed", "clockMs": 900000, "period": 1, "deviceId": "device-1" },
+    { "id": "0192f104-0000-7000-8000-000000000005", "kind": "period_ended", "clockMs": 2400000, "period": 1, "deviceId": "device-1" },
+    { "id": "0192f104-0000-7000-8000-000000000006", "kind": "period_started", "clockMs": 2400000, "period": 2, "deviceId": "device-1" },
+    { "id": "0192f104-0000-7000-8000-000000000007", "kind": "sub", "clockMs": 2400000, "period": 2, "payload": { "onPlayerId": "p18", "offPlayerId": "p2" }, "deviceId": "device-1" },
+    { "id": "0192f104-0000-7000-8000-000000000008", "kind": "red_card", "playerId": "p10", "clockMs": 3000000, "period": 2, "deviceId": "device-2" },
+    { "id": "0192f104-0000-7000-8000-000000000009", "kind": "match_ended", "clockMs": 4500000, "period": 2, "deviceId": "device-1" }
+  ],
+  "expected": {
+    "status": "completed",
+    "period": 2,
+    "clockMs": 4500000,
+    "running": false,
+    "score": {
+      "us": 0,
+      "them": 0
+    },
+    "zone": "our_half",
+    "possession": "us",
+    "territoryMs": {
+      "our_half": 4500000
+    },
+    "possessionMs": {
+      "us": 4500000
+    },
+    "counts": {
+      "red_card": 1,
+      "sub": 1,
+      "yellow_card": 1
+    },
+    "players": {
+      "p1": {
+        "playerId": "p1",
+        "jersey": 1,
+        "position": "loosehead",
+        "group": "front_row",
+        "onPitch": true,
+        "minutesMs": 4500000,
+        "counts": {}
+      },
+      "p10": {
+        "playerId": "p10",
+        "jersey": 10,
+        "position": "fly_half",
+        "group": "half_backs",
+        "onPitch": false,
+        "minutesMs": 3000000,
+        "counts": {
+          "red_card": 1
+        }
+      },
+      "p18": {
+        "playerId": "p18",
+        "jersey": 18,
+        "position": "hooker",
+        "group": "front_row",
+        "onPitch": true,
+        "minutesMs": 2100000,
+        "counts": {}
+      },
+      "p2": {
+        "playerId": "p2",
+        "jersey": 2,
+        "position": "hooker",
+        "group": "front_row",
+        "onPitch": false,
+        "minutesMs": 2400000,
+        "counts": {}
+      },
+      "p20": {
+        "playerId": "p20",
+        "jersey": 20,
+        "position": "",
+        "group": "",
+        "onPitch": false,
+        "minutesMs": 0,
+        "counts": {}
+      },
+      "p7": {
+        "playerId": "p7",
+        "jersey": 7,
+        "position": "openside",
+        "group": "back_row",
+        "onPitch": true,
+        "minutesMs": 3900000,
+        "counts": {
+          "yellow_card": 1
+        }
+      }
+    },
+    "slices": [
+      {
+        "fromMs": 0,
+        "toMs": 1200000,
+        "score": {
+          "us": 0,
+          "them": 0
+        },
+        "territoryMs": {
+          "our_half": 1200000
+        },
+        "possessionMs": {
+          "us": 1200000
+        },
+        "counts": {
+          "yellow_card": 1
+        }
+      },
+      {
+        "fromMs": 1200000,
+        "toMs": 2400000,
+        "score": {
+          "us": 0,
+          "them": 0
+        },
+        "territoryMs": {
+          "our_half": 1200000
+        },
+        "possessionMs": {
+          "us": 1200000
+        },
+        "counts": {}
+      },
+      {
+        "fromMs": 2400000,
+        "toMs": 3600000,
+        "score": {
+          "us": 0,
+          "them": 0
+        },
+        "territoryMs": {
+          "our_half": 1200000
+        },
+        "possessionMs": {
+          "us": 1200000
+        },
+        "counts": {
+          "red_card": 1,
+          "sub": 1
+        }
+      },
+      {
+        "fromMs": 3600000,
+        "toMs": 4800000,
+        "score": {
+          "us": 0,
+          "them": 0
+        },
+        "territoryMs": {
+          "our_half": 900000
+        },
+        "possessionMs": {
+          "us": 900000
+        },
+        "counts": {}
+      }
+    ],
+    "voidedIds": []
+  }
+}

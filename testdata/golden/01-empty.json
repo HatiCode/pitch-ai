@@ -1,0 +1,269 @@
+{
+  "name": "an unplayed fixture folds to a zeroed state with every selected player seeded",
+  "match": {
+    "id": "match-golden-01",
+    "teamId": "team-1",
+    "seasonId": "2026-27",
+    "opponent": "Lansdowne",
+    "kickoffAt": "2026-09-19T14:00:00Z",
+    "competition": "League",
+    "venue": "home",
+    "status": "scheduled",
+    "lineup": {
+      "starters": [
+        { "jersey": 1, "playerId": "p1" },
+        { "jersey": 2, "playerId": "p2" },
+        { "jersey": 3, "playerId": "p3" },
+        { "jersey": 4, "playerId": "p4" },
+        { "jersey": 5, "playerId": "p5" },
+        { "jersey": 6, "playerId": "p6" },
+        { "jersey": 7, "playerId": "p7" },
+        { "jersey": 8, "playerId": "p8" },
+        { "jersey": 9, "playerId": "p9" },
+        { "jersey": 10, "playerId": "p10" },
+        { "jersey": 11, "playerId": "p11" },
+        { "jersey": 12, "playerId": "p12" },
+        { "jersey": 13, "playerId": "p13" },
+        { "jersey": 14, "playerId": "p14" },
+        { "jersey": 15, "playerId": "p15" }
+      ],
+      "bench": [
+        { "jersey": 16, "playerId": "p16" },
+        { "jersey": 17, "playerId": "p17" },
+        { "jersey": 18, "playerId": "p18" },
+        { "jersey": 19, "playerId": "p19" },
+        { "jersey": 20, "playerId": "p20" },
+        { "jersey": 21, "playerId": "p21" },
+        { "jersey": 22, "playerId": "p22" },
+        { "jersey": 23, "playerId": "p23" }
+      ]
+    }
+  },
+  "events": [],
+  "expected": {
+    "status": "scheduled",
+    "period": 0,
+    "clockMs": 0,
+    "running": false,
+    "score": {
+      "us": 0,
+      "them": 0
+    },
+    "zone": "our_half",
+    "possession": "us",
+    "territoryMs": {},
+    "possessionMs": {},
+    "counts": {},
+    "players": {
+      "p1": {
+        "playerId": "p1",
+        "jersey": 1,
+        "position": "loosehead",
+        "group": "front_row",
+        "onPitch": true,
+        "minutesMs": 0,
+        "counts": {}
+      },
+      "p10": {
+        "playerId": "p10",
+        "jersey": 10,
+        "position": "fly_half",
+        "group": "half_backs",
+        "onPitch": true,
+        "minutesMs": 0,
+        "counts": {}
+      },
+      "p11": {
+        "playerId": "p11",
+        "jersey": 11,
+        "position": "wing",
+        "group": "back_three",
+        "onPitch": true,
+        "minutesMs": 0,
+        "counts": {}
+      },
+      "p12": {
+        "playerId": "p12",
+        "jersey": 12,
+        "position": "inside_centre",
+        "group": "centres",
+        "onPitch": true,
+        "minutesMs": 0,
+        "counts": {}
+      },
+      "p13": {
+        "playerId": "p13",
+        "jersey": 13,
+        "position": "outside_centre",
+        "group": "centres",
+        "onPitch": true,
+        "minutesMs": 0,
+        "counts": {}
+      },
+      "p14": {
+        "playerId": "p14",
+        "jersey": 14,
+        "position": "wing",
+        "group": "back_three",
+        "onPitch": true,
+        "minutesMs": 0,
+        "counts": {}
+      },
+      "p15": {
+        "playerId": "p15",
+        "jersey": 15,
+        "position": "fullback",
+        "group": "back_three",
+        "onPitch": true,
+        "minutesMs": 0,
+        "counts": {}
+      },
+      "p16": {
+        "playerId": "p16",
+        "jersey": 16,
+        "position": "",
+        "group": "",
+        "onPitch": false,
+        "minutesMs": 0,
+        "counts": {}
+      },
+      "p17": {
+        "playerId": "p17",
+        "jersey": 17,
+        "position": "",
+        "group": "",
+        "onPitch": false,
+        "minutesMs": 0,
+        "counts": {}
+      },
+      "p18": {
+        "playerId": "p18",
+        "jersey": 18,
+        "position": "",
+        "group": "",
+        "onPitch": false,
+        "minutesMs": 0,
+        "counts": {}
+      },
+      "p19": {
+        "playerId": "p19",
+        "jersey": 19,
+        "position": "",
+        "group": "",
+        "onPitch": false,
+        "minutesMs": 0,
+        "counts": {}
+      },
+      "p2": {
+        "playerId": "p2",
+        "jersey": 2,
+        "position": "hooker",
+        "group": "front_row",
+        "onPitch": true,
+        "minutesMs": 0,
+        "counts": {}
+      },
+      "p20": {
+        "playerId": "p20",
+        "jersey": 20,
+        "position": "",
+        "group": "",
+        "onPitch": false,
+        "minutesMs": 0,
+        "counts": {}
+      },
+      "p21": {
+        "playerId": "p21",
+        "jersey": 21,
+        "position": "",
+        "group": "",
+        "onPitch": false,
+        "minutesMs": 0,
+        "counts": {}
+      },
+      "p22": {
+        "playerId": "p22",
+        "jersey": 22,
+        "position": "",
+        "group": "",
+        "onPitch": false,
+        "minutesMs": 0,
+        "counts": {}
+      },
+      "p23": {
+        "playerId": "p23",
+        "jersey": 23,
+        "position": "",
+        "group": "",
+        "onPitch": false,
+        "minutesMs": 0,
+        "counts": {}
+      },
+      "p3": {
+        "playerId": "p3",
+        "jersey": 3,
+        "position": "tighthead",
+        "group": "front_row",
+        "onPitch": true,
+        "minutesMs": 0,
+        "counts": {}
+      },
+      "p4": {
+        "playerId": "p4",
+        "jersey": 4,
+        "position": "lock",
+        "group": "second_row",
+        "onPitch": true,
+        "minutesMs": 0,
+        "counts": {}
+      },
+      "p5": {
+        "playerId": "p5",
+        "jersey": 5,
+        "position": "lock",
+        "group": "second_row",
+        "onPitch": true,
+        "minutesMs": 0,
+        "counts": {}
+      },
+      "p6": {
+        "playerId": "p6",
+        "jersey": 6,
+        "position": "blindside",
+        "group": "back_row",
+        "onPitch": true,
+        "minutesMs": 0,
+        "counts": {}
+      },
+      "p7": {
+        "playerId": "p7",
+        "jersey": 7,
+        "position": "openside",
+        "group": "back_row",
+        "onPitch": true,
+        "minutesMs": 0,
+        "counts": {}
+      },
+      "p8": {
+        "playerId": "p8",
+        "jersey": 8,
+        "position": "number_eight",
+        "group": "back_row",
+        "onPitch": true,
+        "minutesMs": 0,
+        "counts": {}
+      },
+      "p9": {
+        "playerId": "p9",
+        "jersey": 9,
+        "position": "scrum_half",
+        "group": "half_backs",
+        "onPitch": true,
+        "minutesMs": 0,
+        "counts": {}
+      }
+    },
+    "slices": [],
+    "voidedIds": []
+  }
+}

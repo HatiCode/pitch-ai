@@ -1,0 +1,110 @@
+{
+  "name": "territory and possession spans split across a 20-minute boundary, and a toggle while the clock is stopped changes the zone without accruing time",
+  "match": {
+    "id": "match-golden-06",
+    "teamId": "team-1",
+    "seasonId": "2026-27",
+    "opponent": "Lansdowne",
+    "kickoffAt": "2026-09-19T14:00:00Z",
+    "venue": "neutral",
+    "status": "scheduled",
+    "lineup": {
+      "starters": [{ "jersey": 1, "playerId": "p1" }],
+      "bench": []
+    }
+  },
+  "events": [
+    { "id": "0192f106-0000-7000-8000-000000000001", "kind": "period_started", "clockMs": 0, "period": 1, "deviceId": "device-1" },
+    { "id": "0192f106-0000-7000-8000-000000000002", "kind": "zone_changed", "clockMs": 1140000, "period": 1, "payload": { "zone": "their_22", "possession": "us" }, "deviceId": "device-1" },
+    { "id": "0192f106-0000-7000-8000-000000000003", "kind": "zone_changed", "clockMs": 1320000, "period": 1, "payload": { "zone": "our_half", "possession": "us" }, "deviceId": "device-1" },
+    { "id": "0192f106-0000-7000-8000-000000000004", "kind": "clock_paused", "clockMs": 1500000, "period": 1, "deviceId": "device-1" },
+    { "id": "0192f106-0000-7000-8000-000000000005", "kind": "zone_changed", "clockMs": 1500000, "period": 1, "payload": { "zone": "our_22", "possession": "them" }, "deviceId": "device-1" },
+    { "id": "0192f106-0000-7000-8000-000000000006", "kind": "clock_resumed", "clockMs": 1500000, "period": 1, "deviceId": "device-1" },
+    { "id": "0192f106-0000-7000-8000-000000000007", "kind": "match_ended", "clockMs": 2460000, "period": 1, "deviceId": "device-1" }
+  ],
+  "expected": {
+    "status": "completed",
+    "period": 1,
+    "clockMs": 2460000,
+    "running": false,
+    "score": {
+      "us": 0,
+      "them": 0
+    },
+    "zone": "our_22",
+    "possession": "them",
+    "territoryMs": {
+      "our_22": 960000,
+      "our_half": 1320000,
+      "their_22": 180000
+    },
+    "possessionMs": {
+      "them": 960000,
+      "us": 1500000
+    },
+    "counts": {},
+    "players": {
+      "p1": {
+        "playerId": "p1",
+        "jersey": 1,
+        "position": "loosehead",
+        "group": "front_row",
+        "onPitch": true,
+        "minutesMs": 2460000,
+        "counts": {}
+      }
+    },
+    "slices": [
+      {
+        "fromMs": 0,
+        "toMs": 1200000,
+        "score": {
+          "us": 0,
+          "them": 0
+        },
+        "territoryMs": {
+          "our_half": 1140000,
+          "their_22": 60000
+        },
+        "possessionMs": {
+          "us": 1200000
+        },
+        "counts": {}
+      },
+      {
+        "fromMs": 1200000,
+        "toMs": 2400000,
+        "score": {
+          "us": 0,
+          "them": 0
+        },
+        "territoryMs": {
+          "our_22": 900000,
+          "our_half": 180000,
+          "their_22": 120000
+        },
+        "possessionMs": {
+          "them": 900000,
+          "us": 300000
+        },
+        "counts": {}
+      },
+      {
+        "fromMs": 2400000,
+        "toMs": 3600000,
+        "score": {
+          "us": 0,
+          "them": 0
+        },
+        "territoryMs": {
+          "our_22": 60000
+        },
+        "possessionMs": {
+          "them": 60000
+        },
+        "counts": {}
+      }
+    ],
+    "voidedIds": []
+  }
+}

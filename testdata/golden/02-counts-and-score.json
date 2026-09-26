@@ -1,0 +1,168 @@
+{
+  "name": "counts belong to the tagged player and points from both sides make a 10-7 scoreline",
+  "match": {
+    "id": "match-golden-02",
+    "teamId": "team-1",
+    "seasonId": "2026-27",
+    "opponent": "Lansdowne",
+    "kickoffAt": "2026-09-19T14:00:00Z",
+    "venue": "home",
+    "status": "scheduled",
+    "lineup": {
+      "starters": [
+        { "jersey": 7, "playerId": "p7" },
+        { "jersey": 10, "playerId": "p10" },
+        { "jersey": 11, "playerId": "p11" },
+        { "jersey": 12, "playerId": "p12" }
+      ],
+      "bench": [{ "jersey": 16, "playerId": "p16" }]
+    }
+  },
+  "events": [
+    { "id": "0192f102-0000-7000-8000-000000000001", "kind": "period_started", "clockMs": 0, "period": 1, "deviceId": "device-1" },
+    { "id": "0192f102-0000-7000-8000-000000000002", "kind": "tackle_made", "playerId": "p7", "clockMs": 60000, "period": 1, "deviceId": "device-1" },
+    { "id": "0192f102-0000-7000-8000-000000000003", "kind": "tackle_made", "playerId": "p7", "clockMs": 120000, "period": 1, "deviceId": "device-2" },
+    { "id": "0192f102-0000-7000-8000-000000000004", "kind": "tackle_missed", "playerId": "p7", "clockMs": 180000, "period": 1, "deviceId": "device-1" },
+    { "id": "0192f102-0000-7000-8000-000000000005", "kind": "carry", "playerId": "p12", "clockMs": 240000, "period": 1, "deviceId": "device-1" },
+    { "id": "0192f102-0000-7000-8000-000000000006", "kind": "scrum_won", "clockMs": 300000, "period": 1, "deviceId": "device-1" },
+    { "id": "0192f102-0000-7000-8000-000000000007", "kind": "try", "playerId": "p11", "clockMs": 600000, "period": 1, "deviceId": "device-1" },
+    { "id": "0192f102-0000-7000-8000-000000000008", "kind": "conversion_made", "playerId": "p10", "clockMs": 660000, "period": 1, "deviceId": "device-1" },
+    { "id": "0192f102-0000-7000-8000-000000000009", "kind": "penalty_goal", "playerId": "p10", "clockMs": 1200000, "period": 1, "deviceId": "device-1" },
+    { "id": "0192f102-0000-7000-8000-00000000000a", "kind": "conversion_missed", "playerId": "p10", "clockMs": 1500000, "period": 1, "deviceId": "device-1" },
+    { "id": "0192f102-0000-7000-8000-00000000000b", "kind": "opposition_try", "clockMs": 1800000, "period": 1, "deviceId": "device-1" },
+    { "id": "0192f102-0000-7000-8000-00000000000c", "kind": "opposition_conversion", "clockMs": 1860000, "period": 1, "deviceId": "device-1" }
+  ],
+  "expected": {
+    "status": "in_progress",
+    "period": 1,
+    "clockMs": 1860000,
+    "running": true,
+    "score": {
+      "us": 10,
+      "them": 7
+    },
+    "zone": "our_half",
+    "possession": "us",
+    "territoryMs": {
+      "our_half": 1860000
+    },
+    "possessionMs": {
+      "us": 1860000
+    },
+    "counts": {
+      "carry": 1,
+      "conversion_made": 1,
+      "conversion_missed": 1,
+      "opposition_conversion": 1,
+      "opposition_try": 1,
+      "penalty_goal": 1,
+      "scrum_won": 1,
+      "tackle_made": 2,
+      "tackle_missed": 1,
+      "try": 1
+    },
+    "players": {
+      "p10": {
+        "playerId": "p10",
+        "jersey": 10,
+        "position": "fly_half",
+        "group": "half_backs",
+        "onPitch": true,
+        "minutesMs": 1860000,
+        "counts": {
+          "conversion_made": 1,
+          "conversion_missed": 1,
+          "penalty_goal": 1
+        }
+      },
+      "p11": {
+        "playerId": "p11",
+        "jersey": 11,
+        "position": "wing",
+        "group": "back_three",
+        "onPitch": true,
+        "minutesMs": 1860000,
+        "counts": {
+          "try": 1
+        }
+      },
+      "p12": {
+        "playerId": "p12",
+        "jersey": 12,
+        "position": "inside_centre",
+        "group": "centres",
+        "onPitch": true,
+        "minutesMs": 1860000,
+        "counts": {
+          "carry": 1
+        }
+      },
+      "p16": {
+        "playerId": "p16",
+        "jersey": 16,
+        "position": "",
+        "group": "",
+        "onPitch": false,
+        "minutesMs": 0,
+        "counts": {}
+      },
+      "p7": {
+        "playerId": "p7",
+        "jersey": 7,
+        "position": "openside",
+        "group": "back_row",
+        "onPitch": true,
+        "minutesMs": 1860000,
+        "counts": {
+          "tackle_made": 2,
+          "tackle_missed": 1
+        }
+      }
+    },
+    "slices": [
+      {
+        "fromMs": 0,
+        "toMs": 1200000,
+        "score": {
+          "us": 7,
+          "them": 0
+        },
+        "territoryMs": {
+          "our_half": 1200000
+        },
+        "possessionMs": {
+          "us": 1200000
+        },
+        "counts": {
+          "carry": 1,
+          "conversion_made": 1,
+          "scrum_won": 1,
+          "tackle_made": 2,
+          "tackle_missed": 1,
+          "try": 1
+        }
+      },
+      {
+        "fromMs": 1200000,
+        "toMs": 2400000,
+        "score": {
+          "us": 3,
+          "them": 7
+        },
+        "territoryMs": {
+          "our_half": 660000
+        },
+        "possessionMs": {
+          "us": 660000
+        },
+        "counts": {
+          "conversion_missed": 1,
+          "opposition_conversion": 1,
+          "opposition_try": 1,
+          "penalty_goal": 1
+        }
+      }
+    ],
+    "voidedIds": []
+  }
+}
