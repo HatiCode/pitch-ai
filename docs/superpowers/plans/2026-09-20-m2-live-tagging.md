@@ -889,13 +889,13 @@ M0 shipped no manifest and no service worker, so today the app cannot load witho
 - Modify: `web/package.json`, `web/vite.config.ts`, `web/index.html`, `web/src/main.tsx`, `internal/httpapi/spa.go`
 - Test: `internal/httpapi/spa_test.go`
 
-- [ ] **Step 1: Add the plugin**
+- [x] **Step 1: Add the plugin**
 
 ```bash
 cd web && npm install -D vite-plugin-pwa
 ```
 
-- [ ] **Step 2: Configure it**
+- [x] **Step 2: Configure it**
 
 In `web/vite.config.ts`:
 
@@ -929,7 +929,7 @@ VitePWA({
 })
 ```
 
-- [ ] **Step 3: Produce the icons**
+- [x] **Step 3: Produce the icons**
 
 Two PNGs from `web/public/favicon.svg`. On macOS:
 
@@ -939,7 +939,7 @@ cd web/public && qlmanage -t -s 512 -o . favicon.svg && mv favicon.svg.png icon-
 
 Then a 192px copy with `sips -Z 192 icon-512.png --out icon-192.png`. Any 512px and 192px export works — the artwork is not load-bearing, but the files must exist or the install prompt never appears on an iPad. Verify both are real PNGs with `file web/public/icon-*.png`.
 
-- [ ] **Step 4: Add the iOS home-screen tags**
+- [x] **Step 4: Add the iOS home-screen tags**
 
 `display: standalone` in the manifest is ignored by iOS Safari, which reads its own tags. In `web/index.html`'s `<head>`:
 
@@ -952,19 +952,19 @@ Then a 192px copy with `sips -Z 192 icon-512.png --out icon-192.png`. Any 512px 
 
 The iPad is the primary tagging device, so treat a missing home-screen icon there as a bug, not a polish item.
 
-- [ ] **Step 5: Register the worker**
+- [x] **Step 5: Register the worker**
 
 Create `web/src/lib/pwa.ts` wrapping `registerSW` from `virtual:pwa-register` with `immediate: true`, and call it from `main.tsx` before rendering. Add `"vite-plugin-pwa/client"` to the `types` array in `web/tsconfig.app.json` so the virtual module resolves under `strict`.
 
 Guard registration so it is a no-op when `navigator.serviceWorker` is absent — jsdom has no service worker and every existing component test would otherwise start failing on import.
 
-- [ ] **Step 6: Add cache headers to the SPA handler**
+- [x] **Step 6: Add cache headers to the SPA handler**
 
 Write a failing case in `internal/httpapi/spa_test.go` first: `sw.js` and `index.html` respond with `Cache-Control: no-cache`, and a path under `/assets/` responds with `public, max-age=31536000, immutable`. Then implement it in `spa.go`.
 
 A service worker cached by a CDN or a browser heuristic is how a PWA gets stuck on an old bundle for a week, and the hashed-asset header is the counterpart that makes `no-cache` on the shell cheap.
 
-- [ ] **Step 7: Verify offline loading for real**
+- [x] **Step 7: Verify offline loading for real**
 
 ```bash
 make build && GOOGLE_CLOUD_PROJECT=<project> ./bin/server
@@ -974,7 +974,7 @@ In Chrome: load the app, then DevTools → Application → Service Workers shows
 
 `RESULT:`/`MATCHES:` this one explicitly — it is the only step in the task that proves the others were worth doing.
 
-- [ ] **Step 8: Stage the work**
+- [x] **Step 8: Stage the work**
 
 ```bash
 git add web/package.json web/package-lock.json web/vite.config.ts web/index.html web/tsconfig.app.json web/src/main.tsx web/src/lib/pwa.ts web/public/icon-192.png web/public/icon-512.png internal/httpapi/spa.go internal/httpapi/spa_test.go

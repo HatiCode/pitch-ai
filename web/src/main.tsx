@@ -9,6 +9,9 @@ import { SquadsPage } from "./features/teams/SquadsPage";
 import { RouteError } from "./RouteError";
 import "./index.css";
 import { AuthProvider } from "./lib/auth";
+import { registerServiceWorker } from "./lib/pwa";
+
+registerServiceWorker();
 
 const queryClient = new QueryClient();
 
