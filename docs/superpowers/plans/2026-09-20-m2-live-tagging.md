@@ -729,7 +729,7 @@ Commit message: `feat(match): append events and recompute derived player stats`
 - Consumes: `match.EventStore`, `match.EventReader`, `match.StatsWriter` — satisfied structurally, never named here.
 - Produces: `(*Store).AppendEvents`, `(*Store).Events`, `(*Store).PutPlayerStats`
 
-- [ ] **Step 1: Write the failing store tests**
+- [x] **Step 1: Write the failing store tests**
 
 Follow `internal/store/firestore/testing_test.go`: skip unless `FIRESTORE_EMULATOR_HOST` is set, and use a unique club ID per test so cases do not collide.
 
@@ -742,12 +742,12 @@ Follow `internal/store/firestore/testing_test.go`: skip unless `FIRESTORE_EMULAT
 7. **Events are scoped to the match**: the same event IDs under a second match do not leak into the first.
 8. **`PutPlayerStats` overwrites** rather than merging, so a re-fold after a void lowers a count instead of leaving the old one.
 
-- [ ] **Step 2: Run against the emulator to verify failure**
+- [x] **Step 2: Run against the emulator to verify failure**
 
 Run `make emulator` in another shell, then `make test-store`.
 Expected: FAIL — `undefined: AppendEvents`.
 
-- [ ] **Step 3: Implement the event store**
+- [x] **Step 3: Implement the event store**
 
 ```go
 // eventsCol is a subcollection of the match, so an event can never be read
@@ -786,16 +786,16 @@ func decodeCursor(cursor string) (time.Time, string, error)  // core.ValidationE
 
 The returned cursor is built from the last document in the page; an empty page returns the cursor it was given, so a client polling an idle match does not rewind.
 
-- [ ] **Step 4: Implement the derived stats store**
+- [x] **Step 4: Implement the derived stats store**
 
 `playerStats` as a subcollection of the match, document ID = player ID, written in one `WriteBatch`. The collection name matters: spec section 5's season queries are collection-group queries over `playerStats`, and a different name here silently breaks M4.
 
-- [ ] **Step 5: Run the store tests to verify they pass**
+- [x] **Step 5: Run the store tests to verify they pass**
 
 Run: `make test-store`
 Expected: PASS. Also run `go test ./... -race` and confirm the store tests still skip cleanly with no emulator.
 
-- [ ] **Step 6: Stage the work**
+- [x] **Step 6: Stage the work**
 
 ```bash
 git add internal/store/firestore/event.go internal/store/firestore/playerstats.go internal/store/firestore/event_test.go internal/store/firestore/playerstats_test.go
