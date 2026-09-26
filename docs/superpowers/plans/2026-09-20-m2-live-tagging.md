@@ -1291,7 +1291,7 @@ The one Playwright test spec section 12 calls for: tag with the network disabled
 - Create: `web/playwright.config.ts`, `web/e2e/offline-tagging.spec.ts`, `web/e2e/stubs.ts`
 - Modify: `web/package.json`, `web/src/lib/auth.tsx`, `.github/workflows/ci.yml`, `web/.gitignore`
 
-- [ ] **Step 1: Install Playwright**
+- [x] **Step 1: Install Playwright**
 
 ```bash
 cd web && npm install -D @playwright/test && npx playwright install --with-deps chromium
@@ -1299,7 +1299,7 @@ cd web && npm install -D @playwright/test && npx playwright install --with-deps 
 
 Add `test:e2e` to `package.json` scripts and `/playwright-report`, `/test-results` to `web/.gitignore`.
 
-- [ ] **Step 2: Add the test-only auth stub**
+- [x] **Step 2: Add the test-only auth stub**
 
 The test exercises the outbox, not Firebase. Sign-in is stubbed at one point, guarded so a production bundle cannot contain it:
 
@@ -1312,7 +1312,7 @@ if (import.meta.env.VITE_E2E === "1") { ... }
 
 The stub supplies a fixed membership and a token-less `apiFetch`. Assert its absence in the shipped bundle as part of step 5 rather than trusting the flag.
 
-- [ ] **Step 3: Write the test**
+- [x] **Step 3: Write the test**
 
 `web/e2e/offline-tagging.spec.ts`, against `vite preview` with `VITE_E2E=1`, with `page.route("**/api/**")` serving fixtures from `stubs.ts` and recording every append:
 
@@ -1324,18 +1324,18 @@ The stub supplies a fixed membership and a token-less `apiFetch`. Assert its abs
 6. `context.setOffline(false)`.
 7. Wait for the sync indicator to report everything sent, then assert the recorded appends contain exactly the expected event IDs and kinds, including the void, with no duplicates.
 
-- [ ] **Step 4: Add the CI job**
+- [x] **Step 4: Add the CI job**
 
 A fourth job in `.github/workflows/ci.yml` mirroring the `web` job, running `npx playwright install --with-deps chromium` then `npm run test:e2e`, and add it to the `deploy` job's `needs`.
 
-- [ ] **Step 5: Verify**
+- [x] **Step 5: Verify**
 
 Run: `cd web && npm run test:e2e`
 Expected: PASS.
 
 Then `npm run build && grep -rc "VITE_E2E" dist/ || echo "clean"` — expected: no match in the production bundle.
 
-- [ ] **Step 6: Stage the work**
+- [x] **Step 6: Stage the work**
 
 ```bash
 git add web/playwright.config.ts web/e2e web/package.json web/package-lock.json web/.gitignore web/src/lib/auth.tsx .github/workflows/ci.yml

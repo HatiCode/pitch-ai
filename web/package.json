@@ -10,7 +10,9 @@
 		"preview": "vite preview",
 		"test": "vitest --passWithNoTests",
 		"format": "biome format --write .",
-		"typecheck": "tsc -b --noEmit"
+		"typecheck": "tsc -b --noEmit",
+		"build:e2e": "VITE_E2E=1 VITE_FIREBASE_API_KEY=e2e VITE_FIREBASE_AUTH_DOMAIN=e2e.example.test VITE_FIREBASE_PROJECT_ID=e2e vite build && touch dist/.gitkeep",
+		"test:e2e": "playwright test"
 	},
 	"dependencies": {
 		"@tanstack/react-query": "^5.103.1",
@@ -23,6 +25,7 @@
 	},
 	"devDependencies": {
 		"@biomejs/biome": "^2.5.14",
+		"@playwright/test": "^1.63.0",
 		"@tailwindcss/vite": "^4.3.3",
 		"@testing-library/jest-dom": "^7.0.1",
 		"@testing-library/react": "^16.3.3",
