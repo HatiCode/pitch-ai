@@ -15,6 +15,7 @@ import (
 	"pitch-ai/internal/auth"
 	"pitch-ai/internal/fixture"
 	"pitch-ai/internal/httpapi"
+	"pitch-ai/internal/match"
 	"pitch-ai/internal/squad"
 	firestorestore "pitch-ai/internal/store/firestore"
 	"pitch-ai/web"
@@ -46,6 +47,7 @@ func main() {
 	squadService := squad.NewService(store, store, uuid.NewString)
 	teamService := squad.NewTeamService(store, store, store, uuid.NewString)
 	fixtureService := fixture.NewService(store, store, store, uuid.NewString)
+	matchService := match.NewService(store, store, store, store, store)
 
 	port := os.Getenv("PORT")
 	if port == "" {
@@ -61,6 +63,7 @@ func main() {
 			Squad:   squadService,
 			Teams:   teamService,
 			Fixture: fixtureService,
+			Match:   matchService,
 		}),
 		ReadHeaderTimeout: 10 * time.Second,
 	}

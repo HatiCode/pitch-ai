@@ -822,7 +822,7 @@ Commit message: `feat(store): event log persistence with a resumable cursor`
 
 `ActionTagMatch` already exists in `internal/auth/role.go` and is held by `coach` and `admin` but not `analyst` — M2 is the first milestone that uses it, which is also the first test of whether that table was right.
 
-- [ ] **Step 1: Write the failing handler tests**
+- [x] **Step 1: Write the failing handler tests**
 
 Follow `internal/httpapi/testing_test.go`:
 
@@ -836,12 +836,12 @@ Follow `internal/httpapi/testing_test.go`:
 8. **`GET /api/catalogue` returns every entry** and requires authentication.
 9. **The request body shape is `{"events": [...]}`**, not a bare array: a top-level array has no room for a later field and every other endpoint here takes an object.
 
-- [ ] **Step 2: Run the tests to verify they fail**
+- [x] **Step 2: Run the tests to verify they fail**
 
 Run: `go test ./internal/httpapi/`
 Expected: FAIL — `undefined: handleAppendEvents`.
 
-- [ ] **Step 3: Implement the handlers**
+- [x] **Step 3: Implement the handlers**
 
 Thin: decode → service → encode, no logic, mirroring `internal/httpapi/matches.go`. Add `Match *match.Service` to `Deps` and guard the new routes with `if d.Auth != nil && d.Match != nil`, as the existing groups do.
 
@@ -851,7 +851,7 @@ type appendEventsRequest struct {
 }
 ```
 
-- [ ] **Step 4: Wire it in `main.go`**
+- [x] **Step 4: Wire it in `main.go`**
 
 ```go
 matchService := match.NewService(store, store, store, store, store)
@@ -859,19 +859,19 @@ matchService := match.NewService(store, store, store, store, store)
 
 Pass it as `Match: matchService`.
 
-- [ ] **Step 5: Regenerate types and verify**
+- [x] **Step 5: Regenerate types and verify**
 
 The four string-literal unions were registered in task 1, where the types first appeared. Nothing new needs narrowing here: `MatchState`, `PlayerStats`, `Slice` and `Score` are structs, which tygo renders as interfaces.
 
 Run: `make types`
 Expected: `web/src/types/core.ts` gains `MatchState`, `PlayerStats`, `Slice` and `Score`. Then `cd web && npm run typecheck` to confirm nothing existing broke.
 
-- [ ] **Step 6: Run the tests to verify they pass**
+- [x] **Step 6: Run the tests to verify they pass**
 
 Run: `go test ./... -race && make types && git diff --exit-code web/src/types`
 Expected: PASS with no diff.
 
-- [ ] **Step 7: Stage the work**
+- [x] **Step 7: Stage the work**
 
 ```bash
 git add internal/httpapi cmd/server/main.go cmd/gen-types/main.go web/src/types

@@ -7,6 +7,7 @@ import (
 
 	"pitch-ai/internal/auth"
 	"pitch-ai/internal/fixture"
+	"pitch-ai/internal/match"
 	"pitch-ai/internal/squad"
 )
 
@@ -18,6 +19,7 @@ type Deps struct {
 	Squad   *squad.Service
 	Teams   *squad.TeamService
 	Fixture *fixture.Service
+	Match   *match.Service
 }
 
 // protected requires an authenticated caller whose role permits the action.
@@ -38,6 +40,7 @@ func NewRouter(d Deps) http.Handler {
 
 	if d.Auth != nil {
 		mux.Handle("GET /api/me", d.Auth(http.HandlerFunc(handleMe)))
+		mux.Handle("GET /api/catalogue", d.protected(auth.ActionRead, handleCatalogue))
 	}
 
 	if d.Auth != nil && d.Squad != nil {
@@ -61,6 +64,12 @@ func NewRouter(d Deps) http.Handler {
 		mux.Handle("GET /api/teams/{teamID}/matches/{matchID}", d.protected(auth.ActionRead, d.handleGetMatch))
 		mux.Handle("POST /api/teams/{teamID}/matches", d.protected(auth.ActionEditMatch, d.handleCreateMatch))
 		mux.Handle("PUT /api/teams/{teamID}/matches/{matchID}/lineup", d.protected(auth.ActionEditMatch, d.handleSetLineup))
+	}
+
+	if d.Auth != nil && d.Match != nil {
+		mux.Handle("GET /api/teams/{teamID}/matches/{matchID}/events", d.protected(auth.ActionRead, d.handleListEvents))
+		mux.Handle("POST /api/teams/{teamID}/matches/{matchID}/events", d.protected(auth.ActionTagMatch, d.handleAppendEvents))
+		mux.Handle("GET /api/teams/{teamID}/matches/{matchID}/state", d.protected(auth.ActionRead, d.handleMatchState))
 	}
 
 	// Unmatched /api/ paths must not reach the SPA handler below: a client
