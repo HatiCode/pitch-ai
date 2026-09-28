@@ -1362,7 +1362,7 @@ cd web && npx biome ci . && npm run typecheck && npm test -- --run && npm run te
 
 Next to `test-web`, so the full local suite is discoverable from one file.
 
-- [ ] **Step 3: Deploy**
+- [x] **Step 3: Deploy**
 
 Push to `main` and let CI deploy, or `make deploy` for an out-of-band revision. Confirm the GitHub deployment records the URL and `/api/healthz` returns 200.
 
